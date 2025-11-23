@@ -18,14 +18,21 @@ import game.weekend.framework.core.acts.ActFind;
 import game.weekend.framework.core.acts.ActFindBack;
 import game.weekend.framework.core.acts.ActFindForward;
 import game.weekend.framework.core.acts.ActPrint;
+import game.weekend.warehouse.directories.CompaniesAction;
+import game.weekend.warehouse.directories.GroupsOfCompaniesAction;
+import game.weekend.warehouse.directories.GroupsOfProductsAction;
+import game.weekend.warehouse.directories.ProductsAction;
+import game.weekend.warehouse.documents.CardsAction;
+import game.weekend.warehouse.documents.IssueAction;
+import game.weekend.warehouse.documents.ReceiptsAction;
 
 public class WeekendWarehouse {
 
 	public static final String IMAGE_PATH = "/game/weekend/warehouse/images/";
 
 	public static final String APP_NAME = "WeekendWarehouse";
-	public static final String APP_VERSION = "00.01";
-	public static final String APP_DATE = "22.11.2025";
+	public static final String APP_VERSION = "00.02";
+	public static final String APP_DATE = "23.11.2025";
 	public static final String APP_COPYRIGHT = "(c) Weekend Game, 2025";
 	public static final String APP_OTHER = "Weekend Warehouse";
 
@@ -70,16 +77,15 @@ public class WeekendWarehouse {
 		acts.putAct("Filter", new ActFilter(mainFrame));
 
 		// Документы
-		acts.putAct("Receipts", new ActReceipts(mainFrame));
-		acts.putAct("WarehouseAccountingCards", new ActWarehouseAccountingCards(mainFrame));
-		acts.putAct("GoodsMovement", new ActGoodsMovement(mainFrame));
-		acts.putAct("Issue", new ActIssue(mainFrame));
+		acts.putAct("Receipts", new ReceiptsAction(mainFrame));
+		acts.putAct("Cards", new CardsAction(mainFrame));
+		acts.putAct("Issue", new IssueAction(mainFrame));
 
 		// Справочники
-		acts.putAct("GroupsOfCompanies", new ActGroupsOfCompanies(mainFrame));
-		acts.putAct("Companies", new ActCompanies(mainFrame));
-		acts.putAct("GroupsOfProducts", new ActGroupsOfProducts(mainFrame));
-		acts.putAct("Products", new ActProducts(mainFrame));
+		acts.putAct("GroupsOfCompanies", new GroupsOfCompaniesAction(mainFrame));
+		acts.putAct("Companies", new CompaniesAction(mainFrame));
+		acts.putAct("GroupsOfProducts", new GroupsOfProductsAction(mainFrame));
+		acts.putAct("Products", new ProductsAction(mainFrame));
 
 		// Помощь
 		acts.putAct("About", new ActAbout(mes));

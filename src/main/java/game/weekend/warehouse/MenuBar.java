@@ -43,8 +43,7 @@ class MenuBar extends JMenuBar {
 		JMenu documentsMenu = new JMenu(Loc.get("documents"));
 		documentsMenu.add(acts.getAct("Receipts"));
 		documentsMenu.add(new JSeparator());
-		documentsMenu.add(acts.getAct("WarehouseAccountingCards"));
-		documentsMenu.add(acts.getAct("GoodsMovement"));
+		documentsMenu.add(acts.getAct("Cards"));
 		documentsMenu.add(new JSeparator());
 		documentsMenu.add(acts.getAct("Issue"));
 		add(documentsMenu);

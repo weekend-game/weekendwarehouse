@@ -7,6 +7,7 @@ import java.awt.event.WindowAdapter;
 import javax.swing.ImageIcon;
 import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
+import javax.swing.JInternalFrame;
 import javax.swing.JMenuBar;
 import javax.swing.JToolBar;
 import javax.swing.WindowConstants;
@@ -19,17 +20,12 @@ public class MainFrame {
 	/**
 	 * Создать основное окно приложения.
 	 * 
-	 * @param appName
-	 *            название приложения.
-	 * @param icon
-	 *            пиктограмма приложения.
-	 * @param pro
-	 *            объект локального хранения свойств приложения.
-	 * @param close
-	 *            слушатель с методом вызыаемым при закрытии окна.
+	 * @param appName название приложения.
+	 * @param icon    пиктограмма приложения.
+	 * @param pro     объект локального хранения свойств приложения.
+	 * @param close   слушатель с методом вызыаемым при закрытии окна.
 	 */
-	public MainFrame(String appName, String icon, Proper pro,
-			WindowAdapter close) {
+	public MainFrame(String appName, String icon, Proper pro, WindowAdapter close) {
 		this.pro = pro;
 
 		frame = new JFrame();
@@ -39,7 +35,7 @@ public class MainFrame {
 		frame.setTitle(appName);
 
 		if (icon != null) {
-			ImageIcon i = new ImageIcon(frame.getClass().getResource(icon));
+			ImageIcon i = new ImageIcon(getClass().getResource(icon));
 			frame.setIconImage(i.getImage());
 		}
 
@@ -48,6 +44,8 @@ public class MainFrame {
 
 		deskTop = new JDesktopPane();
 		cp.add(BorderLayout.CENTER, deskTop);
+
+		frameMan = new FrameManager(null, null, this);
 
 		if (close != null) {
 			frame.addWindowListener(close);
@@ -65,17 +63,19 @@ public class MainFrame {
 	 * Закрыть основное окно приложения.
 	 */
 	public boolean close() {
-		pro.saveBounds(frame);
-		pro.save();
-		frame.dispose();
-		return true;
+		boolean ok = frameMan.closeChildFrames();
+		if (ok) {
+			pro.saveBounds(frame);
+			pro.save();
+			frame.dispose();
+		}
+		return ok;
 	}
 
 	/**
 	 * Установить меню приложения.
 	 * 
-	 * @param menuBar
-	 *            меню приложения.
+	 * @param menuBar меню приложения.
 	 */
 	public void setMenuBar(JMenuBar menuBar) {
 		if (menuBar != null) {
@@ -86,8 +86,7 @@ public class MainFrame {
 	/**
 	 * Установить инструментальную линейку приложения.
 	 * 
-	 * @param toolBar
-	 *            инструментальная линейка приложения.
+	 * @param toolBar инструментальная линейка приложения.
 	 */
 	public void setToolBar(JToolBar toolBar) {
 		Container cp = frame.getContentPane();
@@ -97,8 +96,7 @@ public class MainFrame {
 	/**
 	 * Установить статусную строку приложения.
 	 * 
-	 * @param statusBar
-	 *            статусная строка приложения.
+	 * @param statusBar статусная строка приложения.
 	 */
 	public void setStatusBar(StatusBar statusBar) {
 		if (statusBar != null) {
@@ -119,8 +117,7 @@ public class MainFrame {
 	/**
 	 * Установить объект выдачи сообщений и запросов.
 	 * 
-	 * @param mes
-	 *            объект выдачи сообщений и запросов.
+	 * @param mes объект выдачи сообщений и запросов.
 	 */
 	public void setMes(Mes mes) {
 		this.mes = mes;
@@ -138,8 +135,7 @@ public class MainFrame {
 	/**
 	 * Установить объект действий приложения.
 	 * 
-	 * @param act
-	 *            объект действий приложения.
+	 * @param act объект действий приложения.
 	 */
 	public void setActs(Acts acts) {
 		this.acts = acts;
@@ -163,9 +159,37 @@ public class MainFrame {
 		return frame;
 	}
 
+	/**
+	 * Создать внутреннее окно приложения.
+	 */
+	public void createFrame(String className) {
+		if (frameMan != null) {
+			frameMan.createFrame(className, 0, 0);
+		}
+	}
+
+	/**
+	 * Добавить внутреннее окно приложения в desktop.
+	 * 
+	 * @param frame внутреннее окно приложения.
+	 */
+	public void addIntFrame(IntFrame frame) {
+		deskTop.add(frame);
+	}
+
+	/**
+	 * Получить все внутренние окна приложения.
+	 * 
+	 * @return внутренние окна приложения.
+	 */
+	public JInternalFrame[] getAllFrames() {
+		return deskTop.getAllFrames();
+	}
+
 	private JFrame frame;
 	private JDesktopPane deskTop;
 	private Proper pro;
 	private Mes mes;
 	private Acts acts;
+	private FrameManager frameMan;
 }

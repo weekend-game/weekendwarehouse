@@ -30,5 +30,8 @@ class ToolBar extends JToolBar {
 		add(acts.getAct("FindForward"));
 		add(acts.getAct("FindBack"));
 		addSeparator();
+		add(acts.getAct("Receipts"));
+		add(acts.getAct("Cards"));
+		add(acts.getAct("Issue"));
 	}
 }
