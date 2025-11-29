@@ -31,8 +31,8 @@ public class WeekendWarehouse {
 	public static final String IMAGE_PATH = "/game/weekend/warehouse/images/";
 
 	public static final String APP_NAME = "WeekendWarehouse";
-	public static final String APP_VERSION = "00.02";
-	public static final String APP_DATE = "23.11.2025";
+	public static final String APP_VERSION = "00.03";
+	public static final String APP_DATE = "29.11.2025";
 	public static final String APP_COPYRIGHT = "(c) Weekend Game, 2025";
 	public static final String APP_OTHER = "Weekend Warehouse";
 
@@ -70,11 +70,21 @@ public class WeekendWarehouse {
 		acts.putAct("Edit", new ActEdit(mainFrame));
 		acts.putAct("Delete", new ActDelete(mainFrame));
 
+		acts.setEnabled("Add", false);
+		acts.setEnabled("AddCopy", false);
+		acts.setEnabled("Edit", false);
+		acts.setEnabled("Delete", false);
+
 		// Просмотр
 		acts.putAct("Find", new ActFind(mainFrame));
 		acts.putAct("FindForward", new ActFindForward(mainFrame));
 		acts.putAct("FindBack", new ActFindBack(mainFrame));
 		acts.putAct("Filter", new ActFilter(mainFrame));
+
+		acts.setEnabled("Find", false);
+		acts.setEnabled("FindForward", false);
+		acts.setEnabled("FindBack", false);
+		acts.setEnabled("Filter", false);
 
 		// Документы
 		acts.putAct("Receipts", new ReceiptsAction(mainFrame));

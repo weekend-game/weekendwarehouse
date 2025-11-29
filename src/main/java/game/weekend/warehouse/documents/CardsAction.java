@@ -7,7 +7,6 @@ import javax.swing.Action;
 import javax.swing.ImageIcon;
 import javax.swing.KeyStroke;
 
-import game.weekend.framework.core.Acts;
 import game.weekend.framework.core.Loc;
 import game.weekend.framework.core.MainFrame;
 import game.weekend.framework.core.acts.SimActFrame;

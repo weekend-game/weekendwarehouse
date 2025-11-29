@@ -8,7 +8,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
-import javax.swing.JMenuBar;
 import javax.swing.JToolBar;
 import javax.swing.WindowConstants;
 
@@ -77,10 +76,21 @@ public class MainFrame {
 	 * 
 	 * @param menuBar меню приложения.
 	 */
-	public void setMenuBar(JMenuBar menuBar) {
+	public void setMenuBar(IMenuBar menuBar) {
 		if (menuBar != null) {
-			frame.setJMenuBar(menuBar);
+			this.menuBar = menuBar;
+			frame.setJMenuBar(menuBar.getJMenuBar());
+
 		}
+	}
+
+	/**
+	 * Получить меню приложения.
+	 * 
+	 * @return меню приложения.
+	 */
+	public IMenuBar getMenuBar() {
+		return menuBar;
 	}
 
 	/**
@@ -188,6 +198,7 @@ public class MainFrame {
 
 	private JFrame frame;
 	private JDesktopPane deskTop;
+	private IMenuBar menuBar = IMenuBar.NULL;
 	private Proper pro;
 	private Mes mes;
 	private Acts acts;

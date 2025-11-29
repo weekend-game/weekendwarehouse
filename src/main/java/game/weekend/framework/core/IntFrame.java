@@ -36,9 +36,20 @@ public class IntFrame extends JInternalFrame implements Comparable<IntFrame> {
 		addInternalFrameListener(new InternalFrameAdapter() {
 			public void internalFrameActivated(InternalFrameEvent e) {
 				no = ++maxno; // Для сортировки окон в порядке их активизации
+
+				// Тут могут быть определены меню, изменена активность действий
+				activated();
 			}
 
 			public void internalFrameDeactivated(InternalFrameEvent e) {
+
+				// Для каждого окна могут быть свои меню "Edit" и "View", при
+				// деактивизации они сбрасываются в умолчательные.
+				getMainFrame().getMenuBar().defaultEditMenu();
+				getMainFrame().getMenuBar().defaultViewMenu();
+
+				// Тут следует восстановить активность действий
+				deactivated();
 			}
 
 			// Обработка нажатия крестика в правом верхнем углу
@@ -85,6 +96,18 @@ public class IntFrame extends JInternalFrame implements Comparable<IntFrame> {
 			return 1;
 		}
 		return 0;
+	}
+
+	/**
+	 * Вызывается при активизации окна (событие).
+	 */
+	public void activated() {
+	}
+
+	/**
+	 * Вызывается при деактивизации окна (событие).
+	 */
+	public void deactivated() {
 	}
 
 	/**

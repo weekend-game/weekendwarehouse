@@ -5,40 +5,36 @@ import javax.swing.JMenuBar;
 import javax.swing.JSeparator;
 
 import game.weekend.framework.core.Acts;
+import game.weekend.framework.core.IMenuBar;
 import game.weekend.framework.core.Loc;
 
 /**
  * Меню приложения.
  */
-@SuppressWarnings("serial")
-class MenuBar extends JMenuBar {
+class MenuBar implements IMenuBar {
 
 	/**
 	 * Создать меню приложения.
 	 **/
 	public MenuBar(Acts acts) {
 
+		menuBar = new JMenuBar();
+
 		JMenu fileMenu = new JMenu(Loc.get("file"));
 		fileMenu.add(acts.getAct("Print"));
 		fileMenu.add(new JSeparator());
 		fileMenu.add(acts.getAct("Exit"));
-		add(fileMenu);
+		menuBar.add(fileMenu);
 
-		JMenu editMenu = new JMenu(Loc.get("edit"));
-		editMenu.add(acts.getAct("Add"));
-		editMenu.add(acts.getAct("AddCopy"));
-		editMenu.add(acts.getAct("Edit"));
-		editMenu.add(new JSeparator());
-		editMenu.add(acts.getAct("Delete"));
-		add(editMenu);
+		// Будет переопределено активным окном
+		editMenu = new JMenu(Loc.get("edit"));
+		defaultEditMenu();
+		menuBar.add(editMenu);
 
-		JMenu viewMenu = new JMenu(Loc.get("view"));
-		viewMenu.add(acts.getAct("Find"));
-		viewMenu.add(acts.getAct("FindForward"));
-		viewMenu.add(acts.getAct("FindBack"));
-		viewMenu.add(new JSeparator());
-		viewMenu.add(acts.getAct("Filter"));
-		add(viewMenu);
+		// Будет переопределено активным окном
+		viewMenu = new JMenu(Loc.get("view"));
+		defaultViewMenu();
+		menuBar.add(viewMenu);
 
 		JMenu documentsMenu = new JMenu(Loc.get("documents"));
 		documentsMenu.add(acts.getAct("Receipts"));
@@ -46,7 +42,7 @@ class MenuBar extends JMenuBar {
 		documentsMenu.add(acts.getAct("Cards"));
 		documentsMenu.add(new JSeparator());
 		documentsMenu.add(acts.getAct("Issue"));
-		add(documentsMenu);
+		menuBar.add(documentsMenu);
 
 		JMenu directoriesMenu = new JMenu(Loc.get("directories"));
 		directoriesMenu.add(acts.getAct("GroupsOfCompanies"));
@@ -54,10 +50,41 @@ class MenuBar extends JMenuBar {
 		directoriesMenu.add(new JSeparator());
 		directoriesMenu.add(acts.getAct("GroupsOfProducts"));
 		directoriesMenu.add(acts.getAct("Products"));
-		add(directoriesMenu);
+		menuBar.add(directoriesMenu);
 
 		JMenu helpMenu = new JMenu(Loc.get("help"));
 		helpMenu.add(acts.getAct("About"));
-		add(helpMenu);
+		menuBar.add(helpMenu);
 	}
+
+	@Override
+	public JMenuBar getJMenuBar() {
+		return menuBar;
+	}
+
+	@Override
+	public JMenu getEditMenu() {
+		return editMenu;
+	}
+
+	@Override
+	public void defaultEditMenu() {
+		editMenu.removeAll();
+		editMenu.setEnabled(false);
+	}
+
+	@Override
+	public JMenu getViewMenu() {
+		return viewMenu;
+	}
+
+	@Override
+	public void defaultViewMenu() {
+		viewMenu.removeAll();
+		viewMenu.setEnabled(false);
+	}
+
+	private JMenuBar menuBar;
+	private JMenu editMenu;
+	private JMenu viewMenu;
 }
