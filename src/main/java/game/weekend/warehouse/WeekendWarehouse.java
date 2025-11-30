@@ -18,6 +18,7 @@ import game.weekend.framework.core.acts.ActFind;
 import game.weekend.framework.core.acts.ActFindBack;
 import game.weekend.framework.core.acts.ActFindForward;
 import game.weekend.framework.core.acts.ActPrint;
+import game.weekend.framework.utility.help.ActHelp;
 import game.weekend.warehouse.directories.CompaniesAction;
 import game.weekend.warehouse.directories.GroupsOfCompaniesAction;
 import game.weekend.warehouse.directories.GroupsOfProductsAction;
@@ -31,8 +32,8 @@ public class WeekendWarehouse {
 	public static final String IMAGE_PATH = "/game/weekend/warehouse/images/";
 
 	public static final String APP_NAME = "WeekendWarehouse";
-	public static final String APP_VERSION = "00.03";
-	public static final String APP_DATE = "29.11.2025";
+	public static final String APP_VERSION = "00.04";
+	public static final String APP_DATE = "30.11.2025";
 	public static final String APP_COPYRIGHT = "(c) Weekend Game, 2025";
 	public static final String APP_OTHER = "Weekend Warehouse";
 
@@ -98,9 +99,10 @@ public class WeekendWarehouse {
 		acts.putAct("Products", new ProductsAction(mainFrame));
 
 		// Помощь
+		acts.putAct("Help", new ActHelp(mainFrame));
 		acts.putAct("About", new ActAbout(mes));
 
-		mainFrame.setMenuBar(new MenuBar(acts));
+		mainFrame.setMenuBar(new MenuBar(mainFrame, acts));
 		mainFrame.setToolBar(new ToolBar(acts));
 		mainFrame.setStatusBar(statusBar);
 		mainFrame.setMes(mes);

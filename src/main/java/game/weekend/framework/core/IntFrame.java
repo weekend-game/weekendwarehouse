@@ -26,12 +26,10 @@ public class IntFrame extends JInternalFrame implements Comparable<IntFrame> {
 
 		this.id = id;
 		this.mode = mode;
-		this.frameMan = new FrameManager(parentFrameMan, this,
-				parentFrameMan.getMainFrame());
+		this.frameMan = new FrameManager(parentFrameMan, this, parentFrameMan.getMainFrame());
 
 		setDefaultCloseOperation(JInternalFrame.DO_NOTHING_ON_CLOSE);
-		getMainFrame().getPro().setBounds(this, (int) (Math.random() * 100),
-				(int) (Math.random() * 100), 320, 240);
+		getMainFrame().getPro().setBounds(this, (int) (Math.random() * 100), (int) (Math.random() * 100), 320, 240);
 
 		addInternalFrameListener(new InternalFrameAdapter() {
 			public void internalFrameActivated(InternalFrameEvent e) {
@@ -60,8 +58,7 @@ public class IntFrame extends JInternalFrame implements Comparable<IntFrame> {
 		});
 
 		// Обработка ESC, как неопределённое закрытие окна.
-		InputMap inputMap = getRootPane().getInputMap(
-				JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+		InputMap inputMap = getRootPane().getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
 		inputMap.put(KeyStroke.getKeyStroke("pressed ESCAPE"), "Exit");
 		ActionMap aMap = getRootPane().getActionMap();
 		aMap.put("Exit", new AbstractAction() {
@@ -227,15 +224,21 @@ public class IntFrame extends JInternalFrame implements Comparable<IntFrame> {
 	/**
 	 * Создать дочернее окно.
 	 * 
-	 * @param className
-	 *            имя класса дочернего окна.
-	 * @param id
-	 *            уникальный среди окон одного класса идентификатор.
-	 * @param mode
-	 *            режим редактирования отображаемой информации.
+	 * @param className имя класса дочернего окна.
+	 * @param id        уникальный среди окон одного класса идентификатор.
+	 * @param mode      режим редактирования отображаемой информации.
 	 */
 	public final void createFrame(String className, int id, int mode) {
 		frameMan.createFrame(className, id, mode);
+	}
+
+	/*
+	 * Это используется, напрамер для отображения списка
+	 * активных окон в окне выбора активного окна
+	 */
+	@Override
+	public String toString() {
+		return getTitle();
 	}
 
 	private static int maxno = 0;

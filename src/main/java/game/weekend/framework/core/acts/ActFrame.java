@@ -10,9 +10,9 @@ import game.weekend.framework.core.MainFrame;
  * Создать/активизировать независимое внутреннее окно приложения.
  */
 @SuppressWarnings("serial")
-public class SimActFrame extends AbstractAction {
+public class ActFrame extends AbstractAction {
 
-	public SimActFrame(MainFrame mainFrame, String className) {
+	public ActFrame(MainFrame mainFrame, String className) {
 		this.mainFrame = mainFrame;
 		this.className = className;
 	}

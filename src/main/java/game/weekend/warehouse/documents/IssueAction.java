@@ -9,14 +9,14 @@ import javax.swing.KeyStroke;
 
 import game.weekend.framework.core.Loc;
 import game.weekend.framework.core.MainFrame;
-import game.weekend.framework.core.acts.SimActFrame;
+import game.weekend.framework.core.acts.ActFrame;
 import game.weekend.warehouse.WeekendWarehouse;
 
 /**
  * "Отпуск".
  */
 @SuppressWarnings("serial")
-public class IssueAction extends SimActFrame {
+public class IssueAction extends ActFrame {
 
 	public IssueAction(MainFrame mainFrame) {
 		super(mainFrame, "game.weekend.warehouse.documents.IssueJournal");

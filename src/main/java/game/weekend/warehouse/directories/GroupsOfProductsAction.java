@@ -10,13 +10,13 @@ import javax.swing.KeyStroke;
 import game.weekend.framework.core.Acts;
 import game.weekend.framework.core.Loc;
 import game.weekend.framework.core.MainFrame;
-import game.weekend.framework.core.acts.SimActFrame;
+import game.weekend.framework.core.acts.ActFrame;
 
 /**
  * "Группы товаров".
  */
 @SuppressWarnings("serial")
-public class GroupsOfProductsAction extends SimActFrame {
+public class GroupsOfProductsAction extends ActFrame {
 
 	public GroupsOfProductsAction(MainFrame mainFrame) {
 		super(mainFrame, "game.weekend.warehouse.directories.GroupsOfProductsJournal");

@@ -7,6 +7,8 @@ import javax.swing.JSeparator;
 import game.weekend.framework.core.Acts;
 import game.weekend.framework.core.IMenuBar;
 import game.weekend.framework.core.Loc;
+import game.weekend.framework.core.MainFrame;
+import game.weekend.framework.utility.winmenu.WinListener;
 
 /**
  * Меню приложения.
@@ -16,7 +18,7 @@ class MenuBar implements IMenuBar {
 	/**
 	 * Создать меню приложения.
 	 **/
-	public MenuBar(Acts acts) {
+	public MenuBar(MainFrame mainFrame, Acts acts) {
 
 		menuBar = new JMenuBar();
 
@@ -52,7 +54,14 @@ class MenuBar implements IMenuBar {
 		directoriesMenu.add(acts.getAct("Products"));
 		menuBar.add(directoriesMenu);
 
+		// Создается в момент его раскрытия
+		JMenu windowMenu = new JMenu(Loc.get("windows"));
+		windowMenu.addMenuListener(new WinListener(mainFrame, windowMenu));
+		menuBar.add(windowMenu);
+
 		JMenu helpMenu = new JMenu(Loc.get("help"));
+		helpMenu.add(acts.getAct("Help"));
+		helpMenu.add(new JSeparator());
 		helpMenu.add(acts.getAct("About"));
 		menuBar.add(helpMenu);
 	}

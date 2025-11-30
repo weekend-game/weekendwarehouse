@@ -2,7 +2,9 @@ package game.weekend.framework.core;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.event.WindowAdapter;
+import java.util.Arrays;
 
 import javax.swing.ImageIcon;
 import javax.swing.JDesktopPane;
@@ -170,6 +172,15 @@ public class MainFrame {
 	}
 
 	/**
+	 * Получить размер рабочей области основного окна приложения.
+	 * 
+	 * @return размер рабочей области основного окна приложения.
+	 */
+	public Dimension getDesktopSize() {
+		return deskTop.getSize();
+	}
+
+	/**
 	 * Создать внутреннее окно приложения.
 	 */
 	public void createFrame(String className) {
@@ -185,6 +196,24 @@ public class MainFrame {
 	 */
 	public void addIntFrame(IntFrame frame) {
 		deskTop.add(frame);
+	}
+
+	/**
+	 * Получить текущее активное окно приложения.
+	 * 
+	 * @return текущее активное окно приложения.
+	 */
+	public IntFrame getSelectedFrame() {
+		IntFrame frame = (IntFrame) deskTop.getSelectedFrame();
+
+		if (frame == null) {
+			JInternalFrame[] frames = deskTop.getAllFrames();
+			if (frames.length > 0) {
+				Arrays.sort(frames);
+				frame = (IntFrame) frames[0];
+			}
+		}
+		return frame;
 	}
 
 	/**
