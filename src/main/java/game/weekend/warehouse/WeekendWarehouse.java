@@ -19,6 +19,7 @@ import game.weekend.framework.core.acts.ActFindBack;
 import game.weekend.framework.core.acts.ActFindForward;
 import game.weekend.framework.core.acts.ActPrint;
 import game.weekend.framework.utility.help.ActHelp;
+import game.weekend.framework.utility.progprop.ActProgProp;
 import game.weekend.warehouse.directories.CompaniesAction;
 import game.weekend.warehouse.directories.GroupsOfCompaniesAction;
 import game.weekend.warehouse.directories.GroupsOfProductsAction;
@@ -32,8 +33,8 @@ public class WeekendWarehouse {
 	public static final String IMAGE_PATH = "/game/weekend/warehouse/images/";
 
 	public static final String APP_NAME = "WeekendWarehouse";
-	public static final String APP_VERSION = "00.04";
-	public static final String APP_DATE = "30.11.2025";
+	public static final String APP_VERSION = "00.05";
+	public static final String APP_DATE = "06.12.2025";
 	public static final String APP_COPYRIGHT = "(c) Weekend Game, 2025";
 	public static final String APP_OTHER = "Weekend Warehouse";
 
@@ -63,7 +64,10 @@ public class WeekendWarehouse {
 
 		// Файл
 		acts.putAct("Print", new ActPrint(mainFrame));
+		acts.putAct("ProgProp", new ActProgProp(mainFrame));
 		acts.putAct("Exit", new ActExit(this));
+
+		acts.setEnabled("Print", false);
 
 		// Редактирование
 		acts.putAct("Add", new ActAdd(mainFrame));

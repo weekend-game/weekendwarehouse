@@ -25,6 +25,8 @@ class MenuBar implements IMenuBar {
 		JMenu fileMenu = new JMenu(Loc.get("file"));
 		fileMenu.add(acts.getAct("Print"));
 		fileMenu.add(new JSeparator());
+		fileMenu.add(acts.getAct("ProgProp"));
+		fileMenu.add(new JSeparator());
 		fileMenu.add(acts.getAct("Exit"));
 		menuBar.add(fileMenu);
 

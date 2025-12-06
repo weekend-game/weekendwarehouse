@@ -152,11 +152,11 @@ public class GBL {
 	 *
 	 * @param width ширина растяжки.
 	 */
-	public void addVer(int height) {
+	public void addVer(int width) {
 		gbc.weightx = 0.0;
 		gbc.weighty = 0.1;
-		gbc.gridwidth = 1;
-		gbc.gridheight = height;
+		gbc.gridwidth = width;
+		gbc.gridheight = 1;
 		gbc.fill = GridBagConstraints.VERTICAL;
 		gbc.anchor = GridBagConstraints.CENTER;
 		JLabel c = new JLabel("");
