@@ -9,6 +9,7 @@ public abstract class DocData {
 
 	public DocData(IntFrame frame) {
 		mes = frame.getMainFrame().getMes();
+		db = frame.getMainFrame().getDB();
 		pro = frame.getMainFrame().getPro();
 	}
 
@@ -113,11 +114,16 @@ public abstract class DocData {
 		return mes;
 	}
 
+	public final IDB getDB() {
+		return db;
+	}
+
 	public final Proper getPro() {
 		return pro;
 	}
 
 	private final Mes mes;
+	private final IDB db;
 	private final Proper pro;
 	private Map<String, Object> fields = new HashMap<String, Object>();
 	private Map<String, IControl<?>> controls = new HashMap<String, IControl<?>>();

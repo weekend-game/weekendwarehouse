@@ -145,6 +145,24 @@ public class MainFrame {
 	}
 
 	/**
+	 * Установить объект для работы с БД.
+	 * 
+	 * @param db объект для работы с БД.
+	 */
+	public void setDB(IDB db) {
+		this.db = db;
+	}
+
+	/**
+	 * Получить объект для работы с БД.
+	 * 
+	 * @return объект для работы с БД.
+	 */
+	public IDB getDB() {
+		return db;
+	}
+
+	/**
 	 * Установить объект действий приложения.
 	 * 
 	 * @param act объект действий приложения.
@@ -232,4 +250,5 @@ public class MainFrame {
 	private Mes mes;
 	private Acts acts;
 	private FrameManager frameMan;
+	private IDB db;
 }

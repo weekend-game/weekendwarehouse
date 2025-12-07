@@ -37,3 +37,27 @@ A DocData class object is used to store the actual information. It was decided t
 The document window requires elements to build the user interface. The game.weekend.framework.core.controls package is created for this purpose. This package contains the BtnOK and BtnCancel buttons—these are classes that contain regular JButtons. The IControl interface is implemented for input fields. It's currently implemented by a single ConString field. A larger set of fields will be needed later to build the interface.
 
 The "Program Settings" window (game.weekend.framework.utility.progprop package) is created from the above. Its component classes are located here: ActProgProp (Action for including in the menu), ProgPropData (adapting DocData to the specifics of the window), and ProgPropDoc itself. A corresponding menu item (MenuBar) is added. ActProgProp is created in the WeekendWarehouse class.
+
+##### Step 6 Getting Started with the DBMS
+
+Everything you need to work with the DBMS is already there. There's even a window where you specify the driver and connection string.
+
+I'll start with the [PostgreSQL](https://www.postgresql.org/) DBMS. Next, I'll enable the application to work with Oracle DBMS and Derby. This will be an interesting experience adapting the application to different DBMSs.
+
+I use [Docker Desktop](https://www.docker.com/products/docker-desktop/) to work with the Postgres DBMS. Its installation is straightforward.
+
+Everything you need to deploy Postgres is located in the db_postgres folder. There are many articles online about installing Postgres in a Docker environment. I use the docker-compose.yml file. Installation requires just two commands in the command line. Alternatively, you can simply run the make_finlet_postgres.bat file. You only need to do this once. A finlet_postgres container will appear in Docker Desktop, which can be started and stopped using the GUI.
+
+To work with the DBMS, you'll need a database client. I'm using [Squirrel SQL](https://squirrel-sql.sourceforge.io/). To set up the connection, you'll need a JDBC driver for Postgres. You can get it here: [https://jdbc.postgresql.org/download/](https://jdbc.postgresql.org/download/). I'm using postgresql-42.7.3.jar, which is compatible with Java 11. The connection string looks like this: jdbc:postgresql://localhost:5432/finlet. Login: finlet. Password: finlet. Currently, only this user has been created. This was defined in the docker-compose.yml file. Creating more users will be discussed later, when creating the application's user directory.
+
+After setting up the connection in Squirrel, I run the create_db_objects.sql script. The script will create a finlet schema, a general table, and a "General" directory. This table contains a row with the database name and a row with the database version.
+
+To work with the DBMS, JDBC drivers are required. They can be obtained from the DBMS vendors' websites, but this project is a Maven project. Therefore, dependencies for three DBMSs have been added to the pom.xml file.
+
+The "General" directory has been created. It's not much different from the "Program Settings" directory, but it reads and writes its data to the DB, not the application's stored properties.
+
+The IDB interface has been created for working with the DB. This is because working with the DB is required not only in the game.weekend.warehouse package, but also in the game.weekend.framework package. To eliminate the framework's dependency on the application package, an interface had to be used.
+
+A class for working with the DB DB has been created. The void setDB(IDB db) and IDB getDB() methods have been added to MainFrame. Database creation and installation via setDB(IDB db) have been added to WeekendWarehouse. The GeneralData database is now operational. Dissected queries are only processed once per application runtime.
+
+The "General" directory is now operational!
