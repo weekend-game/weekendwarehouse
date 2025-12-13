@@ -21,7 +21,7 @@ public class ReceiptsAction extends ActFrame {
 	public ReceiptsAction(MainFrame mainFrame) {
 		super(mainFrame, "game.weekend.warehouse.documents.ReceiptsJournal");
 		putValue(Action.NAME, Loc.get("receipts"));
-		putValue(Action.SHORT_DESCRIPTION, Loc.get("receipts"));
+		putValue(Action.SHORT_DESCRIPTION, Loc.get("receipt_of_goods"));
 		putValue(Action.SMALL_ICON, new ImageIcon(getClass().getResource(WeekendWarehouse.IMAGE_PATH + "recipients.gif")));
 		putValue(Action.ACCELERATOR_KEY,	KeyStroke.getKeyStroke(KeyEvent.VK_1, InputEvent.ALT_DOWN_MASK));
 	}

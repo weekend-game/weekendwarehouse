@@ -11,7 +11,7 @@ import game.weekend.framework.core.Loc;
 public class GroupsOfCompaniesJournal extends Journal {
 
 	public GroupsOfCompaniesJournal(int id, int mode, FrameManager parentFrameMan) {
-		super(id, mode, parentFrameMan);
+		super(null, id, mode, parentFrameMan);
 
 		this.setTitle(Loc.get("groups_of_companies"));
 	}

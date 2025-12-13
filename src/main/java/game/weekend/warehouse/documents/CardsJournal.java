@@ -11,7 +11,7 @@ import game.weekend.framework.core.Loc;
 public class CardsJournal extends Journal {
 
 	public CardsJournal(int id, int mode, FrameManager parentFrameMan) {
-		super(id, mode, parentFrameMan);
+		super(null, id, mode, parentFrameMan);
 
 		this.setTitle(Loc.get("warehouse_accounting_cards"));
 	}

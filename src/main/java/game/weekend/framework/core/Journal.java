@@ -1,7 +1,11 @@
 package game.weekend.framework.core;
 
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JSeparator;
+
+import game.weekend.framework.core.table.Table;
+import game.weekend.framework.core.table.TableDefinition;
 
 /**
  * Окно журнала документов.
@@ -12,8 +16,21 @@ public class Journal extends IntFrame {
 	/**
 	 * Создать окно журнала документов.
 	 */
-	public Journal(int id, int mode, FrameManager parentFrameManager) {
+	public Journal(String defName, int id, int mode, FrameManager parentFrameManager) {
 		super(id, mode, parentFrameManager);
+
+		if (defName == null)
+			return;
+
+		try {
+			definition = getMainFrame().getDB().getTableDefinition(defName);
+			setTitle(definition.title);
+
+			table = new Table(definition, getMainFrame().getDB());
+			getContentPane().add(table.getPane());
+		} catch (Exception e) {
+			getContentPane().add(new JLabel(e.toString(), JLabel.CENTER));
+		}
 	}
 
 	@Override
@@ -76,4 +93,7 @@ public class Journal extends IntFrame {
 		acts.setEnabled("FindBack", false);
 		acts.setEnabled("Filter", false);
 	}
+
+	private TableDefinition definition;
+	private Table table;
 }

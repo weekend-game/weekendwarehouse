@@ -11,7 +11,7 @@ import game.weekend.framework.core.Loc;
 public class IssueJournal extends Journal {
 
 	public IssueJournal(int id, int mode, FrameManager parentFrameMan) {
-		super(id, mode, parentFrameMan);
+		super(null, id, mode, parentFrameMan);
 
 		this.setTitle(Loc.get("issue"));
 	}

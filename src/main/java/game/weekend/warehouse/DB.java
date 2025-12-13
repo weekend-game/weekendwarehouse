@@ -2,12 +2,15 @@ package game.weekend.warehouse;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import game.weekend.framework.core.IDB;
 import game.weekend.framework.core.Loc;
 import game.weekend.framework.core.Mes;
 import game.weekend.framework.core.Proper;
+import game.weekend.framework.core.table.TableDefinition;
 
 /**
  * Реализация объекта работы с БД для СУБД Derby.
@@ -25,6 +28,7 @@ public class DB implements IDB {
 		this.pro = pro;
 	}
 
+	@Override
 	public Connection getConnection() {
 		if (connection == null) {
 			String driver = pro.getProperty("driver", "");
@@ -57,7 +61,44 @@ public class DB implements IDB {
 		}
 	}
 
+	@Override
+	public TableDefinition getTableDefinition(String name) {
+
+		TableDefinition td = null;
+		ResultSet rs;
+
+		try {
+			if (journalTitles == null)
+				journalTitles = getConnection()
+						.prepareStatement("SELECT id, title, fromView, orderBy FROM journal_titles WHERE name = ?");
+			if (journalColumns == null)
+				journalColumns = getConnection().prepareStatement("SELECT caption, source, width, sumup "
+						+ " FROM journal_columns WHERE title_id = ? ORDER BY nono ");
+
+			journalTitles.setString(1, name);
+			rs = journalTitles.executeQuery();
+			if (rs.next())
+				td = new TableDefinition(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getInt(4));
+			rs.close();
+
+			if (td != null) {
+				journalColumns.setInt(1, td.id);
+				rs = journalColumns.executeQuery();
+				while (rs.next())
+					td.addColumnDefinition(rs.getString(1), rs.getString(2), rs.getInt(3), rs.getBoolean(4));
+				rs.close();
+			}
+		} catch (SQLException e) {
+			System.out.println("DB.getTableDefinition() " + e);
+		}
+
+		return td;
+	}
+
 	private Mes mes;
 	private Proper pro;
 	private Connection connection;
+
+	private static PreparedStatement journalTitles = null;
+	private static PreparedStatement journalColumns = null;
 }
