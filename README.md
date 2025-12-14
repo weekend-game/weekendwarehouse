@@ -61,3 +61,17 @@ The IDB interface has been created for working with the DB. This is because work
 A class for working with the DB DB has been created. The void setDB(IDB db) and IDB getDB() methods have been added to MainFrame. Database creation and installation via setDB(IDB db) have been added to WeekendWarehouse. The GeneralData database is now operational. Dissected queries are only processed once per application runtime.
 
 The "General" directory is now operational!
+
+#### Step 8 Editing documents in the journal, refreshing the journal
+
+I implement document editing operations in the journal: add a new document, add a copy of an existing document (for subsequent editing), edit, and delete an existing document. Pressing F5 or selecting the "Update" menu item updates the information displayed in the journal.
+
+A little about editing with the keyboard and mouse.
+
+Pressing Enter, double-clicking on the journal's summary line, or pressing the "+" key will open a window for creating a new document. Pressing the "*" key will open a window for creating a copy of the current document. Pressing the Del key will delete the document (after asking permission, of course).
+
+The Journal class now implements the **IEditable** interface, which lists methods for all four editing functions. These methods are called by both Actions and the JTable itself when the corresponding keys are pressed or mouse actions are performed.
+
+**So**, in the "Receipts" journal, you can add, copy, edit, and delete documents (just a couple of fields for now). A "Refresh" option has been added to the "View" menu for logs. The app looks like this:
+
+![This is photo number one](./pics/pic08_01.jpg)

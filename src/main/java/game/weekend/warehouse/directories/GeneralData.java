@@ -68,6 +68,11 @@ public class GeneralData extends DocData {
 		return true;
 	}
 
+	@Override
+	public boolean delete() throws Exception {
+		return false;
+	}
+
 	private void saveStringAttr(PreparedStatement ps, String name) throws SQLException {
 		String s = (String) getValue(name);
 		if (s != null && s.equals(""))

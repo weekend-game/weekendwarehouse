@@ -1,5 +1,6 @@
 package game.weekend.framework.core;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -8,9 +9,10 @@ import game.weekend.framework.core.controls.IControl;
 public abstract class DocData {
 
 	public DocData(IntFrame frame) {
-		mes = frame.getMainFrame().getMes();
-		db = frame.getMainFrame().getDB();
-		pro = frame.getMainFrame().getPro();
+		this.frame = frame;
+		this.mes = frame.getMainFrame().getMes();
+		this.db = frame.getMainFrame().getDB();
+		this.pro = frame.getMainFrame().getPro();
 	}
 
 	/**
@@ -19,6 +21,13 @@ public abstract class DocData {
 	 * @return true если данные успешно сохранены.
 	 */
 	public abstract boolean save();
+
+	/**
+	 * Удалить документ.
+	 * 
+	 * @return true если данные успешно удалены.
+	 */
+	public abstract boolean delete() throws Exception;
 
 	/**
 	 * Установить значение поля данных.
@@ -35,6 +44,50 @@ public abstract class DocData {
 	}
 
 	/**
+	 * Установить строковое значение поля данных.
+	 * 
+	 * При чтении данных (обычно в конструкторе) этот метод использунтся для
+	 * размещения прочитанных данных.
+	 * 
+	 * @param name  имя поля.
+	 * @param value значение поля.
+	 */
+	public void setStringValue(String name, String value) {
+		if (value == null) {
+			value = "";
+		} else {
+			value = ((String) value).trim();
+		}
+		fields.remove(name);
+		fields.put(name, value);
+	}
+
+	/**
+	 * Установить значение поля данных типа BigDecimal.
+	 * 
+	 * При чтении данных (обычно в конструкторе) этот метод использунтся для
+	 * размещения прочитанных данных.
+	 * 
+	 * @param name  имя поля.
+	 * @param value значение поля.
+	 */
+	public void setBigDecimalValue(String name, BigDecimal value) {
+		if (value == null) {
+			value = new BigDecimal(0);
+		} else {
+			value = (BigDecimal) value;
+		}
+		fields.remove(name);
+		fields.put(name, value);
+	}
+
+	public void setBigDecimalValue(String name, double value) {
+		BigDecimal b = null;
+		b = new BigDecimal(value);
+		setBigDecimalValue(name, b);
+	}
+
+	/**
 	 * Получить значение поля.
 	 * 
 	 * Будет выдано мсходное значение поля, без возможно внесенных пользователем
@@ -46,6 +99,24 @@ public abstract class DocData {
 	 */
 	public Object getValue(String name) {
 		return fields.get(name);
+	}
+
+	/**
+	 * Получить строковое значение поля.
+	 * 
+	 * Будет выдано мсходное значение поля, без возможно внесенных пользователем
+	 * правок. Исправления пользователя будут учтены только после вызова метода
+	 * update().
+	 * 
+	 * @param name имя поля.
+	 * @return значение поля.
+	 */
+	public String getStringValue(String name) {
+		String s = ((String) fields.get(name)).trim();
+		if (s.length() == 0) {
+			s = null;
+		}
+		return s;
 	}
 
 	/**
@@ -122,6 +193,16 @@ public abstract class DocData {
 		return pro;
 	}
 
+	/**
+	 * Получить окно.
+	 * 
+	 * @return окно.
+	 */
+	public final IntFrame getFrame() {
+		return frame;
+	}
+
+	private final IntFrame frame;
 	private final Mes mes;
 	private final IDB db;
 	private final Proper pro;

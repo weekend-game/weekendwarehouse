@@ -222,6 +222,15 @@ public class IntFrame extends JInternalFrame implements Comparable<IntFrame> {
 	}
 
 	/**
+	 * Получить родительское окно.
+	 * 
+	 * @return родительское окно.
+	 */
+	public final IntFrame getParentFrame() {
+		return frameMan.getParentFrame();
+	}
+
+	/**
 	 * Создать дочернее окно.
 	 * 
 	 * @param className имя класса дочернего окна.
@@ -233,8 +242,8 @@ public class IntFrame extends JInternalFrame implements Comparable<IntFrame> {
 	}
 
 	/*
-	 * Это используется, напрамер для отображения списка
-	 * активных окон в окне выбора активного окна
+	 * Это используется, напрамер для отображения списка активных окон в окне выбора
+	 * активного окна
 	 */
 	@Override
 	public String toString() {

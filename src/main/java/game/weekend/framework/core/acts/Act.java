@@ -23,5 +23,14 @@ public abstract class Act extends AbstractAction {
 		mainFrame.getMes().notice((String) getValue(Action.SHORT_DESCRIPTION) + " - " + Loc.get("not_implemented"));
 	}
 
+	/**
+	 * Получить основное окно приложения.
+	 * 
+	 * @return основное окно приложения.
+	 */
+	public MainFrame getMainFrame() {
+		return mainFrame;
+	}
+
 	private MainFrame mainFrame;
 }

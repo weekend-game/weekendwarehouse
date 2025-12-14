@@ -1,6 +1,7 @@
 package game.weekend.framework.core;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 
 import game.weekend.framework.core.table.TableDefinition;
 
@@ -20,6 +21,13 @@ public interface IDB {
 	 * Завершить работу с БД.
 	 */
 	void closeConnection();
+
+	/**
+	 * Получить ID добавленной записи.
+	 * 
+	 * ps выполненная команда в результате которой было сгенерированно новое id.
+	 */
+	int getID(PreparedStatement ps);
 
 	/**
 	 * Получить определение отображения таблицы.

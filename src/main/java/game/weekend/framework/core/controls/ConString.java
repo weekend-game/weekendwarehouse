@@ -32,7 +32,7 @@ public class ConString implements IControl<String> {
 	public ConString(DocData docData, String name, int width, int maxlen) {
 		this.docData = docData;
 		this.name = name;
-		
+
 		// Регистрация поля в объекте данных
 		docData.setControl(name, this);
 

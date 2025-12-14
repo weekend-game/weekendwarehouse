@@ -51,6 +51,7 @@ public class DB implements IDB {
 		return connection;
 	}
 
+	@Override
 	public void closeConnection() {
 		if (connection != null) {
 			try {
@@ -59,6 +60,23 @@ public class DB implements IDB {
 				System.out.println("DB.closeConnection() " + e);
 			}
 		}
+	}
+
+	@Override
+	public int getID(PreparedStatement ps) {
+		int id = 0;
+
+		try {
+			ResultSet rs = ps.getGeneratedKeys();
+			if (rs.next()) {
+				id = rs.getInt(1);
+			}
+			rs.close();
+		} catch (Exception e) {
+			System.out.println("DB.getID() " + e);
+		}
+
+		return id;
 	}
 
 	@Override

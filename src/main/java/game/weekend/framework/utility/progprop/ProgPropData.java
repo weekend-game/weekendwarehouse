@@ -31,4 +31,9 @@ class ProgPropData extends DocData {
 		pro.save();
 		return true;
 	}
+
+	@Override
+	public boolean delete() throws Exception {
+		return false;
+	}
 }

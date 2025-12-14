@@ -1,6 +1,7 @@
 package game.weekend.framework.core.table;
 
 import java.math.BigDecimal;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -172,9 +173,91 @@ public class TableModelArrayList extends AbstractTableModel implements ITableMod
 	}
 
 	@Override
+	public int getIdByRow(int row) {
+		int id = -1;
+		if (row < rows.size()) {
+			Object[] o = rows.get(row);
+			Object i = o[this.getColumnCount()];
+			id = (Integer) i;
+		}
+		return id;
+	}
+
+	@Override
+	public int getRowById(int id) {
+		int row = -1;
+		int i = 0;
+		for (Object[] o : rows) {
+			if ((Integer) o[o.length - 1] == id) {
+				row = i;
+				break;
+			}
+			++i;
+		}
+		return row;
+	}
+
+	@Override
 	public void setSorter(TableRowSorter<ITableModel> sorter) {
 		this.sorter = sorter;
 	};
+
+	@Override
+	public int added(int id) throws SQLException {
+		int row = -1;
+		String s = "SELECT * FROM " + definition.fromView + " WHERE id = ?";
+		PreparedStatement ps = db.getConnection().prepareStatement(s);
+		ps.setInt(1, id);
+		ResultSet rs = ps.executeQuery();
+
+		if (rs.next()) {
+			row = rows.size();
+			Object[] o = new Object[definition.columns.size() + 1];
+			readRow(rs, o);
+
+			if (nonoColumn >= 0) {
+				int nono = (int) ((Integer) o[nonoColumn]);
+				renumberRows(nono, 1);
+			}
+
+			rows.add(o);
+			fireTableRowsInserted(row, row);
+			fireTableDataChanged();
+		}
+		rs.close();
+		return row;
+	}
+
+	@Override
+	public int edited(int id) throws SQLException {
+		int row = -1;
+		String s = "SELECT * FROM " + definition.fromView + " WHERE id = ?";
+		PreparedStatement ps = db.getConnection().prepareStatement(s);
+		ps.setInt(1, id);
+		ResultSet rs = ps.executeQuery();
+
+		if (rs.next()) {
+			row = getRowById(id);
+			Object[] o = rows.get(row);
+			readRow(rs, o);
+			fireTableRowsUpdated(row, row);
+		}
+		rs.close();
+
+		return row;
+	}
+
+	@Override
+	public void deleted(int row) {
+		if (nonoColumn >= 0) {
+			int nono = (int) ((Integer) getValueAt(row, nonoColumn));
+			renumberRows(nono, -1);
+		}
+
+		rows.remove(row);
+		fireTableRowsDeleted(row, row);
+		fireTableDataChanged();
+	}
 
 	private int getNonoColumn(String[] names) {
 		int col = -1;
@@ -198,6 +281,14 @@ public class TableModelArrayList extends AbstractTableModel implements ITableMod
 		}
 	}
 
+	private void renumberRows(int from, int value) {
+		for (Object[] o : rows) {
+			if ((Integer) o[nonoColumn] >= from) {
+				o[nonoColumn] = (Integer) o[nonoColumn] + value;
+			}
+		}
+	}
+
 	public final static String ID = "id";
 	public final static String NONO = "nono";
 
@@ -207,7 +298,7 @@ public class TableModelArrayList extends AbstractTableModel implements ITableMod
 	private Object[] sum; // Массив объектов для хранения итоговых сумм
 
 	private TableRowSorter<ITableModel> sorter; // Сортировщик табличных
-													// данных
+												// данных
 
 	private int nonoColumn = -1;
 
