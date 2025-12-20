@@ -118,6 +118,15 @@ public class MainFrame {
 	}
 
 	/**
+	 * Получить статусную строку приложения.
+	 * 
+	 * @return статусная строка приложения.
+	 */
+	public StatusBar getStatusBar() {
+		return statusBar;
+	}
+
+	/**
 	 * Получить объект локального хранения свойств приложения.
 	 * 
 	 * @return объект локального хранения свойств приложения.
@@ -248,6 +257,7 @@ public class MainFrame {
 	private IMenuBar menuBar = IMenuBar.NULL;
 	private Proper pro;
 	private Mes mes;
+	private StatusBar statusBar;
 	private Acts acts;
 	private FrameManager frameMan;
 	private IDB db;

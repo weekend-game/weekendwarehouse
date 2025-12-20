@@ -51,6 +51,8 @@ class MenuBar implements IMenuBar {
 		JMenu directoriesMenu = new JMenu(Loc.get("directories"));
 		directoriesMenu.add(acts.getAct("General"));
 		directoriesMenu.add(new JSeparator());
+		directoriesMenu.add(acts.getAct("Warehouses"));
+		directoriesMenu.add(new JSeparator());
 		directoriesMenu.add(acts.getAct("GroupsOfCompanies"));
 		directoriesMenu.add(acts.getAct("Companies"));
 		directoriesMenu.add(new JSeparator());

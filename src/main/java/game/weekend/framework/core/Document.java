@@ -32,7 +32,7 @@ public class Document extends IntFrame {
 			if (name.length() > FIELD_LENGTH) {
 				name = name.substring(0, FIELD_LENGTH - 1) + "...";
 			}
-			title = title + " (" + name + ")";
+			title = title + " \"" + name + "\"";
 		}
 
 		switch (getMode()) {

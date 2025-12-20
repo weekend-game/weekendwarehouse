@@ -22,10 +22,11 @@ import game.weekend.framework.core.acts.ActRefresh;
 import game.weekend.framework.utility.help.ActHelp;
 import game.weekend.framework.utility.progprop.ActProgProp;
 import game.weekend.warehouse.directories.CompaniesAction;
-import game.weekend.warehouse.directories.GeneralAction;
 import game.weekend.warehouse.directories.GroupsOfCompaniesAction;
-import game.weekend.warehouse.directories.GroupsOfProductsAction;
+import game.weekend.warehouse.directories.GeneralAction;
 import game.weekend.warehouse.directories.ProductsAction;
+import game.weekend.warehouse.directories.GroupsOfProductsAction;
+import game.weekend.warehouse.directories.WarehousesAction;
 import game.weekend.warehouse.documents.CardsAction;
 import game.weekend.warehouse.documents.IssueAction;
 import game.weekend.warehouse.documents.ReceiptsAction;
@@ -35,8 +36,8 @@ public class WeekendWarehouse {
 	public static final String IMAGE_PATH = "/game/weekend/warehouse/images/";
 
 	public static final String APP_NAME = "WeekendWarehouse";
-	public static final String APP_VERSION = "00.08";
-	public static final String APP_DATE = "14.12.2025";
+	public static final String APP_VERSION = "00.09";
+	public static final String APP_DATE = "20.12.2025";
 	public static final String APP_COPYRIGHT = "(c) Weekend Game, 2025";
 	public static final String APP_OTHER = "Weekend Warehouse";
 
@@ -102,6 +103,7 @@ public class WeekendWarehouse {
 
 		// Справочники
 		acts.putAct("General", new GeneralAction(mainFrame));
+		acts.putAct("Warehouses", new WarehousesAction(mainFrame));
 		acts.putAct("GroupsOfCompanies", new GroupsOfCompaniesAction(mainFrame));
 		acts.putAct("Companies", new CompaniesAction(mainFrame));
 		acts.putAct("GroupsOfProducts", new GroupsOfProductsAction(mainFrame));

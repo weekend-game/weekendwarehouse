@@ -18,15 +18,11 @@ public class FrameManager {
 	/**
 	 * Создать диспетчер окон.
 	 * 
-	 * @param parent
-	 *            родительский диспетчер окон.
-	 * @param frame
-	 *            окно являющееся владельцем созаваемого диспетчера.
-	 * @param mainFrame
-	 *            основное окно приложения.
+	 * @param parent    родительский диспетчер окон.
+	 * @param frame     окно являющееся владельцем созаваемого диспетчера.
+	 * @param mainFrame основное окно приложения.
 	 */
-	protected FrameManager(FrameManager parent, IntFrame frame,
-			MainFrame mainFrame) {
+	protected FrameManager(FrameManager parent, IntFrame frame, MainFrame mainFrame) {
 		this.parentFrameMan = parent;
 		this.frame = frame;
 		this.mainFrame = mainFrame;
@@ -35,18 +31,15 @@ public class FrameManager {
 	/**
 	 * Создать дочернее окно.
 	 * 
-	 * @param className
-	 *            класс создаваемого окна.
-	 * @param id
-	 *            иденификатор окна.
-	 * @param mode
-	 *            режим окна.
+	 * @param className класс создаваемого окна.
+	 * @param id        иденификатор окна.
+	 * @param mode      режим окна.
 	 */
 	@SuppressWarnings("unchecked")
 	protected void createFrame(String className, int id, int mode) {
 		IntFrame newFrame = null;
 
-		if (id >= 0 && mode != 1 && mode != 3) {
+		if (id >= 0 && mode != IEditable.ADD && mode != IEditable.ADD_COPY) {
 			newFrame = getChildFrame(className, id);
 		}
 
@@ -54,16 +47,14 @@ public class FrameManager {
 			if (newFrame == null) {
 				@SuppressWarnings("rawtypes")
 				Class c = Class.forName(className);
-				Constructor<IntFrame> cnr = c.getConstructor(new Class[] {
-						int.class, int.class, FrameManager.class });
+				Constructor<IntFrame> cnr = c.getConstructor(new Class[] { int.class, int.class, FrameManager.class });
 				newFrame = cnr.newInstance(id, mode, this);
 				mainFrame.addIntFrame(newFrame);
 				childFrames.add(newFrame);
 			}
 			newFrame.setSelected(true);
 		} catch (Exception e) {
-			System.out.println("FrameManager.createFrame('" + className + "', "
-					+ id + ", " + mode + ")\n" + e);
+			System.out.println("FrameManager.createFrame('" + className + "', " + id + ", " + mode + ")\n" + e);
 		}
 	}
 
@@ -137,10 +128,8 @@ public class FrameManager {
 	/**
 	 * Поиск окна указанного класса и ID в списке дочерних окон
 	 * 
-	 * @param className
-	 *            класс окна.
-	 * @param id
-	 *            иденификатор окна.
+	 * @param className класс окна.
+	 * @param id        иденификатор окна.
 	 * @return ссылка на окно или null если не найдено.
 	 */
 	private IntFrame getChildFrame(String className, int id) {

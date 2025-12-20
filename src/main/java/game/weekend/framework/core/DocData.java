@@ -11,6 +11,7 @@ public abstract class DocData {
 	public DocData(IntFrame frame) {
 		this.frame = frame;
 		this.mes = frame.getMainFrame().getMes();
+		this.statusBar = frame.getMainFrame().getStatusBar();
 		this.db = frame.getMainFrame().getDB();
 		this.pro = frame.getMainFrame().getPro();
 	}
@@ -44,6 +45,20 @@ public abstract class DocData {
 	}
 
 	/**
+	 * Получить значение поля.
+	 * 
+	 * Будет выдано мсходное значение поля, без возможно внесенных пользователем
+	 * правок. Исправления пользователя будут учтены только после вызова метода
+	 * update().
+	 * 
+	 * @param name имя поля.
+	 * @return значение поля.
+	 */
+	public Object getValue(String name) {
+		return fields.get(name);
+	}
+
+	/**
 	 * Установить строковое значение поля данных.
 	 * 
 	 * При чтении данных (обычно в конструкторе) этот метод использунтся для
@@ -60,6 +75,99 @@ public abstract class DocData {
 		}
 		fields.remove(name);
 		fields.put(name, value);
+	}
+
+	/**
+	 * Получить строковое значение поля.
+	 * 
+	 * Будет выдано мсходное значение поля, без возможно внесенных пользователем
+	 * правок. Исправления пользователя будут учтены только после вызова метода
+	 * update().
+	 * 
+	 * @param name имя поля.
+	 * @return значение поля.
+	 */
+	public String getStringValue(String name) {
+		String s = (String) fields.get(name);
+		if (s != null) {
+			s = s.trim();
+			if (s.length() == 0) {
+				s = null;
+			}
+		}
+		return s;
+	}
+
+	/**
+	 * Установить логическое значение поля данных.
+	 * 
+	 * При чтении данных (обычно в конструкторе) этот метод использунтся для
+	 * размещения прочитанных данных.
+	 * 
+	 * @param name  имя поля.
+	 * @param value значение поля.
+	 */
+	public void setBooleanValue(String name, Boolean value) {
+		if (value == null) {
+			value = false;
+		} else {
+			value = (Boolean) value;
+		}
+		fields.remove(name);
+		fields.put(name, value);
+	}
+
+	/**
+	 * Получить логическое значение поля.
+	 * 
+	 * Будет выдано мсходное значение поля, без возможно внесенных пользователем
+	 * правок. Исправления пользователя будут учтены только после вызова метода
+	 * update().
+	 * 
+	 * @param name имя поля.
+	 * @return значение поля.
+	 */
+	public Boolean getBooleanValue(String name) {
+		Boolean b = (Boolean) fields.get(name);
+		if (b == null)
+			b = false;
+		return b;
+	}
+
+	/**
+	 * Установить значение поля данных типа Integer.
+	 * 
+	 * При чтении данных (обычно в конструкторе) этот метод использунтся для
+	 * размещения прочитанных данных.
+	 * 
+	 * @param name  имя поля.
+	 * @param value значение поля.
+	 */
+	public void setIntegerValue(String name, Integer value) {
+		if (value == null) {
+			value = 0;
+		} else {
+			value = (Integer) value;
+		}
+		fields.remove(name);
+		fields.put(name, value);
+	}
+
+	/**
+	 * Получить значение поля типа Integer.
+	 * 
+	 * Будет выдано мсходное значение поля, без возможно внесенных пользователем
+	 * правок. Исправления пользователя будут учтены только после вызова метода
+	 * update().
+	 * 
+	 * @param name имя поля.
+	 * @return значение поля.
+	 */
+	public Integer getIntegerValue(String name) {
+		Integer i = (Integer) fields.get(name);
+		if (i == null)
+			i = 0;
+		return i;
 	}
 
 	/**
@@ -88,7 +196,7 @@ public abstract class DocData {
 	}
 
 	/**
-	 * Получить значение поля.
+	 * Получить значение поля типа BigDecimal.
 	 * 
 	 * Будет выдано мсходное значение поля, без возможно внесенных пользователем
 	 * правок. Исправления пользователя будут учтены только после вызова метода
@@ -97,26 +205,11 @@ public abstract class DocData {
 	 * @param name имя поля.
 	 * @return значение поля.
 	 */
-	public Object getValue(String name) {
-		return fields.get(name);
-	}
-
-	/**
-	 * Получить строковое значение поля.
-	 * 
-	 * Будет выдано мсходное значение поля, без возможно внесенных пользователем
-	 * правок. Исправления пользователя будут учтены только после вызова метода
-	 * update().
-	 * 
-	 * @param name имя поля.
-	 * @return значение поля.
-	 */
-	public String getStringValue(String name) {
-		String s = ((String) fields.get(name)).trim();
-		if (s.length() == 0) {
-			s = null;
-		}
-		return s;
+	public BigDecimal getBigDecimalValue(String name) {
+		BigDecimal d = (BigDecimal) fields.get(name);
+		if (d == null)
+			d = new BigDecimal("0");
+		return d;
 	}
 
 	/**
@@ -176,13 +269,16 @@ public abstract class DocData {
 	 * Сохранить изменения компонентов ввода в полях данных.
 	 */
 	public void update() {
-		for (IControl<?> g : controls.values()) {
+		for (IControl<?> g : controls.values())
 			g.save();
-		}
 	}
 
 	public final Mes getMes() {
 		return mes;
+	}
+
+	public final StatusBar getStatusBar() {
+		return statusBar;
 	}
 
 	public final IDB getDB() {
@@ -204,6 +300,7 @@ public abstract class DocData {
 
 	private final IntFrame frame;
 	private final Mes mes;
+	private final StatusBar statusBar;
 	private final IDB db;
 	private final Proper pro;
 	private Map<String, Object> fields = new HashMap<String, Object>();

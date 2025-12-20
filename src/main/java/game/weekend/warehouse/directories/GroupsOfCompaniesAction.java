@@ -13,7 +13,7 @@ import game.weekend.framework.core.MainFrame;
 import game.weekend.framework.core.acts.ActFrame;
 
 /**
- * "Группы организаций".
+ * "Группы компаний".
  */
 @SuppressWarnings("serial")
 public class GroupsOfCompaniesAction extends ActFrame {

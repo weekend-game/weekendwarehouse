@@ -28,6 +28,25 @@ public class GeneralData extends DocData {
 
 			readStringAttr(select, "content");
 			readStringAttr(select, "version");
+			readStringAttr(select, "company");
+			readStringAttr(select, "address");
+			readStringAttr(select, "telephone");
+			readStringAttr(select, "email");
+			readStringAttr(select, "site");
+			readStringAttr(select, "reg_no");
+			readStringAttr(select, "town");
+			readStringAttr(select, "inn");
+			readStringAttr(select, "kpp");
+			readStringAttr(select, "okato");
+			readStringAttr(select, "okpo");
+			readStringAttr(select, "account");
+			readStringAttr(select, "bank");
+			readStringAttr(select, "bic");
+			readStringAttr(select, "corr_acc");
+			readStringAttr(select, "head");
+			readStringAttr(select, "chief_accountant");
+			readStringAttr(select, "accountant");
+			readStringAttr(select, "issued_by");
 
 		} catch (Exception e) {
 			getMes().err("GeneralData()\n" + e);
@@ -60,6 +79,26 @@ public class GeneralData extends DocData {
 				update = ((DB) getDB()).getConnection().prepareStatement("UPDATE general SET value = ? WHERE name = ?");
 
 			saveStringAttr(update, "content");
+			// "version" не записываем, поле только для чтения
+			saveStringAttr(update, "company");
+			saveStringAttr(update, "address");
+			saveStringAttr(update, "telephone");
+			saveStringAttr(update, "email");
+			saveStringAttr(update, "site");
+			saveStringAttr(update, "reg_no");
+			saveStringAttr(update, "town");
+			saveStringAttr(update, "inn");
+			saveStringAttr(update, "kpp");
+			saveStringAttr(update, "okato");
+			saveStringAttr(update, "okpo");
+			saveStringAttr(update, "account");
+			saveStringAttr(update, "bank");
+			saveStringAttr(update, "bic");
+			saveStringAttr(update, "corr_acc");
+			saveStringAttr(update, "head");
+			saveStringAttr(update, "chief_accountant");
+			saveStringAttr(update, "accountant");
+			saveStringAttr(update, "issued_by");
 
 		} catch (Exception e) {
 			getMes().err("GeneralData.save()\n" + e);

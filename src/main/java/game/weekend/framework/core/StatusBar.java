@@ -40,7 +40,7 @@ public class StatusBar {
 	 * @param mes
 	 *            текст сообщения.
 	 */
-	protected void showMessage(String mes) {
+	public void showMessage(String mes) {
 		if (tmr != null && tmr.isRunning()) {
 			tmr.stop();
 		}
