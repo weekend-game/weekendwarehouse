@@ -69,7 +69,7 @@ public class Document extends IntFrame {
 	@Override
 	public void activated() {
 		Acts acts = getMainFrame().getActs();
-		acts.setEnabled("Print", true);
+		acts.setEnabled("Print", false);
 	}
 
 	@Override

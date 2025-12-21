@@ -79,10 +79,10 @@ public class WarehousesData extends DocData {
 		} catch (SQLException e) {
 			switch (e.getSQLState()) {
 			case "23502":
-				getMes().err("Укажите наименование склада.");
+				getMes().err(Loc.get("specify_the_name") + ".");
 				break;
 			case "23505":
-				getMes().err("Указанное наименование уже имеется в справочнике.");
+				getMes().err(Loc.get("specified_name_is_already_in_the_directory") + ".");
 				break;
 			default:
 				getMes().err("WarehousesData.save()\n" + e);

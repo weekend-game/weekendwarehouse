@@ -75,13 +75,13 @@ public class GroupsOfProductsData extends DocData {
 		} catch (SQLException e) {
 			switch (e.getSQLState()) {
 			case "23502":
-				getMes().err("Укажите наименование группы.");
+				getMes().err(Loc.get("specify_the_name") + ".");
 				break;
 			case "23505":
-				getMes().err("Указанное наименование уже имеется в справочнике.");
+				getMes().err(Loc.get("specified_name_is_already_in_the_directory") + ".");
 				break;
 			default:
-				getMes().err("ProductsData.save()\n" + e);
+				getMes().err("GroupsOfProductsData.save()\n" + e);
 			}
 			return false;
 		} catch (Exception e) {
@@ -105,7 +105,7 @@ public class GroupsOfProductsData extends DocData {
 			delete.execute();
 		} catch (SQLException e) {
 			if (e.getSQLState().equalsIgnoreCase("23503"))
-				getMes().err("Указанная группа используется и не может быть удалена.");
+				getMes().err(Loc.get("the_specified_group_is_in_use_and_cannot_be_deleted") + ".");
 			else
 				getMes().err("GroupsOfProductsData.delete()\n" + e);
 			return false;

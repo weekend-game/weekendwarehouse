@@ -60,6 +60,18 @@ public class ConString implements IControl<String> {
 	}
 
 	@Override
+	public String setValue(String value) {
+		comp.setValue(value);
+		String m = null;
+		try {
+			valid();
+		} catch (Exception e) {
+			m = e.getMessage();
+		}
+		return m;
+	}
+
+	@Override
 	public String getValue() {
 		try {
 			comp.commitEdit();
@@ -97,6 +109,16 @@ public class ConString implements IControl<String> {
 	@Override
 	public JComponent getComp() {
 		return comp;
+	}
+
+	@Override
+	public void clear() {
+		comp.setValue("");
+	}
+
+	@Override
+	public void read() {
+		comp.setValue((String) docData.getValue(name));
 	}
 
 	/**

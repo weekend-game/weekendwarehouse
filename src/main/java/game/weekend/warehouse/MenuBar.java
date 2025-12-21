@@ -58,6 +58,8 @@ class MenuBar implements IMenuBar {
 		directoriesMenu.add(new JSeparator());
 		directoriesMenu.add(acts.getAct("GroupsOfProducts"));
 		directoriesMenu.add(acts.getAct("Products"));
+		directoriesMenu.add(new JSeparator());
+		directoriesMenu.add(acts.getAct("Autonumberer"));
 		menuBar.add(directoriesMenu);
 
 		// Создается в момент его раскрытия

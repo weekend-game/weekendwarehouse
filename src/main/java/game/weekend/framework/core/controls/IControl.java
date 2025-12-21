@@ -10,6 +10,14 @@ import javax.swing.JComponent;
 public interface IControl<T> {
 
 	/**
+	 * Ввести значение.
+	 * 
+	 * @return null, если введено допустимое значение, строка с сообщением, если нет
+	 *         (т.е. значение возвращённое valid()).
+	 */
+	String setValue(String value);
+
+	/**
 	 * Получить введёное значение.
 	 * 
 	 * @return введённое значение.
@@ -56,4 +64,14 @@ public interface IControl<T> {
 	 * @return объект класса JComponent.
 	 */
 	JComponent getComp();
+
+	/**
+	 * Очистить вводимие значение.
+	 */
+	void clear();
+
+	/**
+	 * Восстановить вводимие значение (прочитать из объекта данных).
+	 */
+	void read();
 }

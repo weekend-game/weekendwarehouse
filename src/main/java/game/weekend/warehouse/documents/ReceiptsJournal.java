@@ -3,6 +3,7 @@ package game.weekend.warehouse.documents;
 import game.weekend.framework.core.FrameManager;
 import game.weekend.framework.core.IEditable;
 import game.weekend.framework.core.Journal;
+import game.weekend.framework.core.Loc;
 
 /**
  * Поступления.
@@ -11,7 +12,9 @@ import game.weekend.framework.core.Journal;
 public class ReceiptsJournal extends Journal {
 
 	public ReceiptsJournal(int id, int mode, FrameManager parentFrameMan) {
-		super("receipts", id, mode, parentFrameMan);
+		super(null, id, mode, parentFrameMan);
+		
+		this.setTitle(Loc.get("receipts"));
 	}
 
 	/**

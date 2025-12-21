@@ -38,17 +38,17 @@ public class Journal extends IntFrame implements IEditable {
 	@Override
 	public void activated() {
 		Acts acts = getMainFrame().getActs();
-		acts.setEnabled("Print", true);
+		acts.setEnabled("Print", false);
 
 		acts.setEnabled("Add", true);
 		acts.setEnabled("AddCopy", true);
 		acts.setEnabled("Edit", true);
 		acts.setEnabled("Delete", true);
 
-		acts.setEnabled("Find", true);
-		acts.setEnabled("FindForward", true);
-		acts.setEnabled("FindBack", true);
-		acts.setEnabled("Filter", true);
+		acts.setEnabled("Find", false);
+		acts.setEnabled("FindForward", false);
+		acts.setEnabled("FindBack", false);
+		acts.setEnabled("Filter", false);
 		acts.setEnabled("Refresh", true);
 
 		// Создание меню Редактирование
