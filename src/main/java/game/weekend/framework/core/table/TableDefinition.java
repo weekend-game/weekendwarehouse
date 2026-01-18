@@ -30,15 +30,18 @@ public class TableDefinition {
 		public final String source;
 		/** Заголовок. */
 		public final String caption;
+		/** Класс используемый для отображения в JTable. */
+		public final String displayClass;
 		/** Ширина. */
 		public final int width;
 		/** Признак необходимости расчитывать сумму по колонке. */
 		public final boolean sumup;
 
 		/** Создать объект атрибутов колонки. */
-		public ColumnDefinition(String caption, String source, int width, boolean sumup) {
+		public ColumnDefinition(String caption, String source, String displayClass, int width, boolean sumup) {
 			this.caption = Loc.get(caption.trim());
 			this.source = source.trim();
+			this.displayClass = (displayClass == null) ? "java.lang.String" : displayClass.trim();
 			this.width = width;
 			this.sumup = sumup;
 		}
@@ -57,7 +60,7 @@ public class TableDefinition {
 	/**
 	 * Добавить колонку в определение отображения таблицы.
 	 */
-	public void addColumnDefinition(String caption, String source, int width, boolean sumup) {
-		columns.add(new ColumnDefinition(caption, source, width, sumup));
+	public void addColumnDefinition(String caption, String source, String displayClass, int width, boolean sumup) {
+		columns.add(new ColumnDefinition(caption, source, displayClass, width, sumup));
 	}
 }

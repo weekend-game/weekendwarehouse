@@ -1,6 +1,7 @@
 package game.weekend.framework.core;
 
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
 
 import javax.swing.AbstractAction;
 import javax.swing.ActionMap;
@@ -23,7 +24,22 @@ public class IntFrame extends JInternalFrame implements Comparable<IntFrame> {
 	 */
 	protected IntFrame(int id, int mode, FrameManager parentFrameMan) {
 		super("", true, true, true, true);
+		initFrame(id, mode, parentFrameMan);
+	}
 
+	/**
+	 * Создать внутреннее окно приложения.
+	 */
+	protected IntFrame(int id, int mode, FrameManager parentFrameMan, ArrayList<ListData> arrayListData) {
+		super("", true, true, true, true);
+		this.arrayListData = arrayListData;
+		initFrame(id, mode, parentFrameMan);
+	}
+
+	/**
+	 * Собственно создать внутреннее окно приложения.
+	 */
+	private void initFrame(int id, int mode, FrameManager parentFrameMan) {
 		this.id = id;
 		this.mode = mode;
 		this.frameMan = new FrameManager(parentFrameMan, this, parentFrameMan.getMainFrame());
@@ -230,6 +246,21 @@ public class IntFrame extends JInternalFrame implements Comparable<IntFrame> {
 		return frameMan.getParentFrame();
 	}
 
+	public ArrayList<ListData> getArrayListData() {
+		return arrayListData;
+	}
+
+	/**
+	 * Создать дочернее окно.
+	 * 
+	 * @param className имя класса дочернего окна.
+	 * @param id        уникальный среди окон одного класса идентификатор.
+	 * @param mode      режим редактирования отображаемой информации.
+	 */
+	public final void createFrame(String className, int id, int mode, ArrayList<ListData> al) {
+		frameMan.createFrame(className, id, mode, al);
+	}
+
 	/**
 	 * Создать дочернее окно.
 	 * 
@@ -241,8 +272,14 @@ public class IntFrame extends JInternalFrame implements Comparable<IntFrame> {
 		frameMan.createFrame(className, id, mode);
 	}
 
+	/**
+	 * Сообщение от изменении в таблице (если она конечно есть в данном окне).
+	 */
+	public void modified(int id, int mode) {
+	}
+
 	/*
-	 * Это используется, напрамер для отображения списка активных окон в окне выбора
+	 * Это используется, например для отображения списка активных окон в окне выбора
 	 * активного окна
 	 */
 	@Override
@@ -256,4 +293,5 @@ public class IntFrame extends JInternalFrame implements Comparable<IntFrame> {
 	private int id = 0;
 	private int mode = 0;
 	private FrameManager frameMan;
+	private ArrayList<ListData> arrayListData;
 }

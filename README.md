@@ -1,78 +1,156 @@
 ## WeekendWarehouse
 
-But before we start working with the DBMS, we need to implement MDI, or at least the basics.
+#### Шаг 1 Основное окно, меню, инструментальная и статусная линейки, сообщения
 
-##### Step 1
+В Eclipse создал Maven-проект. Сейчас это не играет никакой роли, но как только начнётся работа с СУБД, Maven будет использоваться для скачивания JDBC-драйверов.
 
-...
+В проекте создал два пакета: **game.weekend.framework** и **game.weekend.warehouse**. Это наглядно разделяет общий функционал для подобного класса программ и собственно реализацию складского учёта.
 
-##### Step 2
+Все пиктограммы, необходимые для фреймворка, расположил в пакете **game.weekend.framework.images**.
 
-...
+Пакет **game.weekend.framework.core** содержит ядро фреймворка, как ясно из названия. Сейчас он содержит:
 
-##### Step 3
+**Acts** - контейнер для хранения всех Actions приложения. Сейчас неочевидно, зачем нужно все Actions приложения засовывать в какой-то контейнер, но это понадобится на последующих шагах разработки.
 
-In the IntFrame class, I add empty methods activate() and deactivate(). They are called in the InternalFrameAdapter for window activation and deactivation events, respectively. I'll describe their use below.
+**Loc** - локализация.
 
-The "Edit" and "View" menus can't be permanently active in an application. They contain items relevant to most windows, but not all. Therefore, their activity should be determined by the current window. Moreover, immediately after the application starts, there is no active window, meaning these menus, as well as all the items they contain, should be inactive.
+**MainFrame** - основное окно приложения, объединяющее в себе все элементы и функционал пользовательского интерфейса. MainFrame не является наследником JFrame, но его содержит. MainFrame проедоставляет публичные методы для установки меню, инструметальной линейки, строки состояния, объекту сообщений в модальных окнах. Даёт доступ к объектам: хранимых свойств приложения, сообщений, коллекции Actions используемых приложением и к JFrame выполняющего роль основного окна приложения.
 
-Therefore, I create the **IMenuBar** interface, which the MenuBar class will implement. The MenuBar constructor will generate the application menu (JMenuBar), but without the Edit and View menus. Instead, it calls the following methods:
+**Mes** - сообщения в модальных окнах.
+
+**Proper** - локально хранимые свойства приложения.
+
+**StatusBar** - строка состояния приложения.
+
+Actions для создания пунктов меню и кнопок инструментальной линейки расположены в пакете **game.weekend.framework.core.acts**.
+
+**game.weekend.warehouse** содержит главный класс приложения WeekendWarehouse, инструментальную линейку с набором пиктограмм, меню и набор Actions, связанных со складским учётом.
+
+Пиктограммы приложения расположены в пакете **game.weekend.warehouse.images**.
+
+**Итак**, пока единственным рабочим элементом приложения является пункт меню "О программе...". А выглядит приложение вот так:
+
+![This is photo number one](./pics/pic01_01.jpg)
+
+#### Шаг 2 Основа MDI
+
+Окна в приложении могут быть самостоятельными. Например, журналы документов. Так журнал "Поступления", содержащий список документов отражающих поступление товара, никак не зависит от журнала "Отпуск", содержащего список документов отражающих отгрузку товара. Эти окна могут открываться в произвольном порядке и закрытие одного не влияет на другое.
+
+Но окна могут быть и зависисмыми друг от друга. Например, открыв журнал документов "Поступления", пользователь может выбрать интересущий документ и открыть его для редактирования. Затем, не закрывая редактируемого документа, пользователь может выбрать из журнала другой документ и открыть его на редактирование. Такми образом получается, что окно "Поступления" породило окно Поступление1 и Поступление2. Теперь если пользователь закрывает журнал "Поступления", то следует закрыть и порождённые окна, а именно, окна Поступление1 и Поступление2. Но, например, в Поступление2 могли внести изменения, и следует задать вопрос пользователю, а желает ли он сохранить эти изменения и только после закрывать окно. Для решения задач, связанных с управлением окнами, создаю класс **FrameManager**. А собственно окна это объекты класса **IntFrame** (наследник JInternalFrame). IntFrame будет базовым классом для всех окон приложения.
+
+Окна могут создавать и более сложную иерархическую структуру. Но, конечно понятно, что это затруднит работу пользователя, а значит злоупотреблять такой возможностью не следует.
+
+FrameManager содержит метод специально предназначенный для создания внутренних окон приложения: createFrame(String className, int id, int mode). Параметер className это имя класса (с пакетом) из которого будет сделано окно. Так если надо создать окно журнала документов "Поступления", то следут указать "game.weekend.warehouse.documents.ReceiptsJournal". Параметер id это идентификатор документа. Для журнала документов "Поступления" никакого идентификатора нет, поэтому следует указать 0. А при создании окна для конкретного документа в журнале, понадобится указать его id из БД. Это даст возможность FrameManager-у понять, что если он уже создавал окно с таким id, то не следует создавать новое окно, а следует просто активизировать, вывести на передний план уже существующее. Параметер mode будет позже использоваться для того, чтобы указать следует ли открывать окно для просмотра документа, его редактирования или создания нового.
+
+Внесены некоторые изменения в класс MainFrame. В конструкторе создаётся объект класса FrameManager. Изменен метод close(). Теперь он закроет основное окно приложения только если если удастся закрыть все внутренние окна. Добавлены методы:
+* void createFrame(String className) - создать внутреннее окно приложения;
+* void addIntFrame(IntFrame frame) - добавить внутреннее окно приложения в desktop;
+* JInternalFrame[] getAllFrames() - получить все внутренние окна приложения.
+
+Для удобства создания внутренних окон из Action создан класс **ActFrame**.
+
+**Итак**, при выборе пунктов из меню "Документы" и "Справочники" появляются окна с заголовком. А выглядит приложение вот так:
+
+![This is photo number one](./pics/pic02_01.jpg)
+
+#### Шаг 3
+
+В классе IntFrame добавляю пустые методы activate() и deactivate(). Они вызываются в InternalFrameAdapter для событий активации и деактивации окна соответственно. Об их использовании напишу немного ниже.
+
+Меню "Edit" и "View" не могут быть постоянно активны в приложении. Они содержат пункты, актуальные для большинства окон, но не для всех. Поэтому их активность должно определять текущее окно. Более того, сразу после запуска приложения нет ни одного активного окна, а значит, эти меню должны быть неактивны, как и все составляющие их пункты.
+
+Поэтому я делаю интерфейс **IMenuBar**, который будет реализовывать класс MenuBar. В конструкторе MenuBar будет формироваться меню приложения (JMenuBar), но без "Edit" и "View". Вместо них вызываются методы:
 public void defaultEditMenu()
-and
+и
 public void defaultViewMenu(),
-which generate empty, inactive menus.
+которые сформируют пустые неактивные меню.
 
-Any application window that inherits IntFrame must define these two menus from the available actions in the activated() method mentioned above. And in the deactivated() method, it must deactivate the actions used.
+Любое окно приложения, а оно должно быть наследником IntFrame, в методе activated(), о котором я упомянул выше, должно будет определить эти два меню из имеющихся Actions. А в методе deactivated() сделать используемые Actions неактивными.
 
-To display journals and document directories, I create a **Journal** class. To display the documents that make up the journals and directories, I create a **Document** class. These classes implement the most commonly used Edit and View menus. Naturally, each specific journal and document can override them in its own way.
+Для отображения журналов документов и справочников создаю класс **Journal**. Для отображения документов, которые составляют журналы и справочники, создаю класс **Document**. Эти классы реализуют наиболее часто встречающиеся меню "Edit" и "View". Естественно, каждый конкретный журнал и конкретный документ могут переопределить их по-своему.
 
-##### Step 5: Creating the First Document Window
+#### Шаг 4
 
-A document is a product receipt, product card, or product shipment. A document is a row from any directory. However, all these documents are stored in the database. In this step, the "Program Setup" document will be created. It stores the name of the DB driver class and the DB connection string. It stores (and reads) this information not in the DB, but in the application's stored properties, i.e., it uses the Proper class.
+...
 
-The document must read the information, display it in a window for subsequent user editing, and be able to save the data or discard the changes. The Document class was created in the previous step. It had only two methods: activated() and deactivated(). These were used to control the activity of menu items and toolbar buttons. Now, additional methods are added: setDocData(), getDocData(), hasChanges(), and save().
+#### Шаг 5 Создание первого окна документа
 
-A DocData class object is used to store the actual information. It was decided to store all document fields in a Map<String, Object> object. This isn't as fast as a class with a set of member variables that replicate the document structure, but it's acceptable for implementing a UI.
+Документ - это поступление товаров, карточка товара, отгрузка товаров. Документ - это строка из любого справочника. Но все эти документы хранятся в БД. На данном шаге будет создан документ «Настройка программы», и хранит он наименование класса драйвера БД и строку соединения с БД. Причём сохраняет (и читает) эту информацию не в БД, а в хранимых свойствах приложения, т.е. использует класс Proper.
 
-The document window requires elements to build the user interface. The game.weekend.framework.core.controls package is created for this purpose. This package contains the BtnOK and BtnCancel buttons—these are classes that contain regular JButtons. The IControl interface is implemented for input fields. It's currently implemented by a single ConString field. A larger set of fields will be needed later to build the interface.
+Документ должен прочитать информацию, отобразить её в окне для последующего редактирования пользователем и уметь сохранить данные или отменить сделанные изменения. Класс Document был создан на предшествующем шаге. Он имел только два метода: activated() и deactivated(). Они использовались для управления активностью пунктов меню и кнопок toolbar-а. Теперь добавляются ещё методы: setDocData(), getDocData(), hasChanges() и save().
 
-The "Program Settings" window (game.weekend.framework.utility.progprop package) is created from the above. Its component classes are located here: ActProgProp (Action for including in the menu), ProgPropData (adapting DocData to the specifics of the window), and ProgPropDoc itself. A corresponding menu item (MenuBar) is added. ActProgProp is created in the WeekendWarehouse class.
+Для собственно хранения информации используется объект класса DocData. Принято решения хранить все поля документа в объекте тип Map<String, Object>. Это не так быстро, как класс с набором переменных-членов повторяющих структуру документа, но для реализации UI приемлемо.
 
-##### Step 6 Getting Started with the DBMS
+Для окна документа нужны элементы для построения пользовательского интерфейса. Для этой цели создаётся пакет game.weekend.framework.core.controls. Пакет содержит кнопки BtnOK, BtnCancel – это классы, содержащие обычные JButton. Для полей ввода сделан интерфейс IControl. Его реализует пока единственное поле ConString. Далее понадобится большой набор полей для построения интерфейса.
 
-Everything you need to work with the DBMS is already there. There's even a window where you specify the driver and connection string.
+Из перечисленного создано окно «Настройка программы» (пакет game.weekend.framework.utility.progprop). Тут расположены составляющие его классы: ActProgProp - Action для включения в меню, ProgPropData - адаптация DocData под специфику работы окна и собственно ProgPropDoc. Добавлен соответствующий пункт в меню (MenuBar). В классе WeekendWarehouse осуществляется создание ActProgProp.
 
-I'll start with the [PostgreSQL](https://www.postgresql.org/) DBMS. Next, I'll enable the application to work with Oracle DBMS and Derby. This will be an interesting experience adapting the application to different DBMSs.
+#### Шаг 6 Начало работы с СУБД
 
-I use [Docker Desktop](https://www.docker.com/products/docker-desktop/) to work with the Postgres DBMS. Its installation is straightforward.
+Всё необходимое для работы с СУБД уже есть. Есть даже окно, где указывается драйвер и строка соединения.
 
-Everything you need to deploy Postgres is located in the db_postgres folder. There are many articles online about installing Postgres in a Docker environment. I use the docker-compose.yml file. Installation requires just two commands in the command line. Alternatively, you can simply run the make_finlet_postgres.bat file. You only need to do this once. A finlet_postgres container will appear in Docker Desktop, which can be started and stopped using the GUI.
+Для начала буду использовать СУБД [PostgreSQL](https://www.postgresql.org/). Далее сделаю возможной работу приложения с Oracle DBMS и Derby. Это будет интересным опытом адаптации приложения под различные СУБД.
 
-To work with the DBMS, you'll need a database client. I'm using [Squirrel SQL](https://squirrel-sql.sourceforge.io/). To set up the connection, you'll need a JDBC driver for Postgres. You can get it here: [https://jdbc.postgresql.org/download/](https://jdbc.postgresql.org/download/). I'm using postgresql-42.7.3.jar, which is compatible with Java 11. The connection string looks like this: jdbc:postgresql://localhost:5432/finlet. Login: finlet. Password: finlet. Currently, only this user has been created. This was defined in the docker-compose.yml file. Creating more users will be discussed later, when creating the application's user directory.
+Для работы с СУБД Postgres использую [Docker Desktop](https://www.docker.com/products/docker-desktop/). Его установка проблем не создаёт.
 
-After setting up the connection in Squirrel, I run the create_db_objects.sql script. The script will create a finlet schema, a general table, and a "General" directory. This table contains a row with the database name and a row with the database version.
+Всё необходимое для развёртывания Postgres расположено в папке db_postgres. В интернете много статей, посвящённых установке Postgres в среде Docker. Я использую файл docker-compose.yml. Для установки понадобится выполнить всего две команды в командной строке. Но можно и просто запустить файл make_finlet_postgres.bat. Делать это нужно только один раз. В Docker Desktop появится контейнер finlet_postgres, который можно запускать или останавливать, пользуясь GUI.
 
-To work with the DBMS, JDBC drivers are required. They can be obtained from the DBMS vendors' websites, but this project is a Maven project. Therefore, dependencies for three DBMSs have been added to the pom.xml file.
+Для работы с СУБД понадобится какой-нибудь клиент баз данных. Использую [Squirrel SQL](https://squirrel-sql.sourceforge.io/). Для настройки подключения понадобится JDBC-драйвер для Postgres. Его можно взять тут: [https://jdbc.postgresql.org/download/](https://jdbc.postgresql.org/download/). Использую postgresql-42.7.3.jar - он подходит для Java 11. Строка подключения выглядит так: jdbc:postgresql://localhost:5432/finlet. Логин: finlet. Пароль: finlet. Сейчас создан только этот пользователь. Это было определено в файле docker-compose.yml. Создание большего количества пользователей будет разобрано позже, при создании справочника пользователей приложения.
 
-The "General" directory has been created. It's not much different from the "Program Settings" directory, but it reads and writes its data to the DB, not the application's stored properties.
+После настройки подключения в Squirrel запускаю скрипт create_db_objects.sql. Скрипт создаст схему finlet, таблицу general - справочник "Общее". В таблицу помещается строка с названием БД и строка с версией БД.
 
-The IDB interface has been created for working with the DB. This is because working with the DB is required not only in the game.weekend.warehouse package, but also in the game.weekend.framework package. To eliminate the framework's dependency on the application package, an interface had to be used.
+Для работы с СУБД нужны JDBC-драйверы. Их можно получить с сайтов производителей СУБД, но этот проект является maven-проектом. Поэтому в файл pom.xml добавлены зависимости для трех СУБД.
 
-A class for working with the DB DB has been created. The void setDB(IDB db) and IDB getDB() methods have been added to MainFrame. Database creation and installation via setDB(IDB db) have been added to WeekendWarehouse. The GeneralData database is now operational. Dissected queries are only processed once per application runtime.
+Создан справочник "Общее". Он мало чем отличается от справочника «Настройка программы», но читает и записывает свои данные он не в хранимых свойствах приложения, а в БД.
 
-The "General" directory is now operational!
+Для работы с БД создан интерфейс IDB. Дело в том, что работа с БД нужна не только в пакете game.weekend.warehouse, но и в пакете game.weekend.framework. Что бы исключить зависимость фреймворка от прикладного пакета пришлось использовать интерфейс.
 
-#### Step 8 Editing documents in the journal, refreshing the journal
+Создан класс для работы с БД DB. В MainFrame добавлены методы void setDB(IDB db) и IDB getDB(). В WeekendWarehouse добавлены создание DB и его установка посредством setDB(IDB db). GeneralData работает БД. Препарируемые запросы препарируются только один раз за время работы приложения.
 
-I implement document editing operations in the journal: add a new document, add a copy of an existing document (for subsequent editing), edit, and delete an existing document. Pressing F5 or selecting the "Update" menu item updates the information displayed in the journal.
+Справочник "Общее" работает!
 
-A little about editing with the keyboard and mouse.
+#### Шаг 7 Отображение документов в виде журнала
 
-Pressing Enter, double-clicking on the journal's summary line, or pressing the "+" key will open a window for creating a new document. Pressing the "*" key will open a window for creating a copy of the current document. Pressing the Del key will delete the document (after asking permission, of course).
+Информация о том, как следует отобразить журнал документов хранится в двух таблицах: journal_titles, где размещается информация о заголовке журнала и journal_columns, где размещается информация о каждой колонке жунала. Подразумевается, что для отображения каждого журнала документов в БД создаётся представление (view).
+В описании заголовка указывается:
+* name - наименование журнала для ссылок на него его в программе,
+* title - заголовок окна журнала (пользовательское наименование журнала),
+* fromView - имя представления которое будет использоваться для выборки документоа,
+* orderBy - номер колонки по которой следует отсортировать журнал при отображении,
+* rightType - тип прав доступа. Но это будет проработано позже, а пока не используется.
+В описании колонок указывается:
+* title_id - ссылка на заголовок,
+* nono - номер колоки,
+* caption - заголовок колонки (подвергается локализации),
+* source - наименование поля в представлении,
+* width - ширина на экране,
+* sumup - флаг того, что следует в последней строке журнала отобразить сумму по данной колоке.
 
-The Journal class now implements the **IEditable** interface, which lists methods for all four editing functions. These methods are called by both Actions and the JTable itself when the corresponding keys are pressed or mouse actions are performed.
+Если в представлении (view) будет содержаться поле с именеи no (0 AS no), то это поле будет использоваться для нумерации отображаемых строк журнала. Для удобства просмотра журнала, его чётные строки отображаются с серым фоном, а нечётные - с белым фоном. Самая последняя строка журнала это итоговоая строка. Как уже горвил, для колонок с установленным флагом в поле sumup будет рассчитана сумма по всем строкам и отображена в итоговой строке.
 
-**So**, in the "Receipts" journal, you can add, copy, edit, and delete documents (just a couple of fields for now). A "Refresh" option has been added to the "View" menu for logs. The app looks like this:
+В файле со скриптом create_db_objects.sql добавлено создание таблиц journal_titles, journal_columns и их заполнение для журнала "Поступления". Также создаётся сам журнал "Поступления" таблица receipts (только несколько полей) и представление для его отображения v_receipts. Журнал заполняется несколькими тестовыми записями.
+
+Отображение журнала осуществляется посредством JTable. Но что бы это сделать пришлось создать целый пакет **game.weekend.framework.core.table** со следующими классами.
+
+**Table** содержит и управляет всем необходимым для работы JTable. JTable работает не непосредственно с деанными, а с моделью, реализацию которой делает **TableModelArrayList**. Информация о том, что должно быть отображено, загружается из таблиц journal_titles и journal_columns загружается в объект класса **TableDefinition**. Реализацию "полосок" в журнале (четные серые, нечетные белые) реализует класс **StripedRenderer**. Сорировку по колонкам, с учётом итоговой строки, релизует **SummaryTableRowSorter**. Для удобства работы вводится интерфейс **ITableModel**. На этом шаге он содержит всего пару методов, но он будет расширяться.
+
+Использование этого пакета потребовало добавить в интерфейс IDB метод getTableDefinition() который длжен создавать объект TableDefinition и заполнять его данными. Естествеено, класс DB реализует этот метод. В конструктор Journal добавлен параметр с наименованием определения журнала и фрагмент создания табличного отображения журнала документов.
+
+**Итак**, при выборе пункта "Поступления" из меню "Документы" или кликнув на пиктограмме с зелёной стрелкой, откроется журнал документов в табличном виде. Все документы пронумерованы в колонке No. По колонке "Сумма" расчитывается итог. Можно изменять размер колонок. Можно сортировать, кликая на заголовках колонок. А выглядит приложение вот так:
+
+![This is photo number one](./pics/pic07_01.jpg)
+
+#### Шаг 8 Редактирование документов в журнале, обновление журнала
+
+Реализую операции редактирования документа в журнале: добавить новый документ, добавить копию имеющегося (для последующего редактирования), исправить и удалить имеющийся документ. По клавише F5 или при выборе пункта меню "Обновить" делаю обновление информации, отображённой в журнале.
+
+Немного о редактировании посредством клавиатуры и мыши.
+
+Нажатие Enter, двойной клик на итоговой строке журнала или нажатие клавиши "+" откроет окно для создания нового документа. Нажатие клавиши "*" откроет окно для создания копии текущего документа. Нажатие клавиши Del удалит документ (естественно, предварительно спросив разрешения). 
+
+Класс Journal теперь реализует интерфейс **IEditable**, в котором перечислены методы для всех четырёх функций редактирования. Эти методы вызываются как Actions, так и самой таблицей JTable при нажатии соответствующих клавиш и действий мышью.
+
+**Итак**, в журнале "Поступления" можно добавлять, добавлять копии, исправлять и удалять документы (всего пару полей пока). В меню "Просмотр" журналов добавлен пункт "Обновить". А выглядит приложение вот так:
 
 ![This is photo number one](./pics/pic08_01.jpg)
 
@@ -145,3 +223,13 @@ ConСatBox - выбор значения из справочника в виде
 А затем вернулся к прикладному программированию и завершил создание недостающих справочников.
 
 **Итак**, сделано три справочника: "Компании", "Товары" и "Автонумерация". Все необходимые справочники имеются!
+
+#### Шаг 11 Документ со списком
+
+Все окна документов (карточек), созданные для редактирования справочников, не содержат списков. Такие документы, как "Поступление" или "Отгрузка", список содержат. А это значит, что продолжать прикладное программирование невозможно. На этом шаге делаю документ со списком.
+
+Для этого класс TableModelArrayList пришлось заменить двумя классами: TableModelDB - это модель, работающая с таблицами БД, и TableModelAL - это модель, работающая с ArrayList, в который предварительно была прочитана информация. FrameManager получил разновидность метода createFrame(), принимающий список для последующей передачи окну-наследнику IntFrame. Собственно, документ со списком - это DocumentWithAList, являющийся наследником Document. Его особенностью является содержание методов для редактирования списка.
+
+**Итак**, сделанное опробовано в окне для редактирования поступления.
+
+![This is photo number one](./pics/pic11_01.jpg)

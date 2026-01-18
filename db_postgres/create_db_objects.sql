@@ -18,6 +18,7 @@ CREATE TABLE finlet.journal_columns (
   nono INTEGER,
   caption CHAR(64),
   source CHAR(64),
+  display_class CHAR(64),
   width SMALLINT,
   sumup BOOLEAN NOT NULL
 );
@@ -68,10 +69,10 @@ INSERT INTO journal_columns (title_id, nono, caption, source, width, sumup) VALU
 INSERT INTO journal_columns (title_id, nono, caption, source, width, sumup) VALUES (1, 2, 'name', 'name', 160, 'false');
 INSERT INTO journal_columns (title_id, nono, caption, source, width, sumup) VALUES (1, 3, 'full_name', 'full_name', 512, 'false');
 
-INSERT INTO warehouses (name, full_name) VALUES ('Главный', 'Главный склад компании');
-INSERT INTO warehouses (name, full_name) VALUES ('Снежный', 'Склад на Снежной улице');
-INSERT INTO warehouses (name, full_name) VALUES ('Липовый', 'Склад на Липовой улице');
-INSERT INTO warehouses (name, full_name) VALUES ('Пром', 'Склад в промышленной зоне');
+INSERT INTO warehouses (name, full_name) VALUES ('Р“Р»Р°РІРЅС‹Р№', 'Р“Р»Р°РІРЅС‹Р№ СЃРєР»Р°Рґ РєРѕРјРїР°РЅРёРё');
+INSERT INTO warehouses (name, full_name) VALUES ('РЎРЅРµР¶РЅС‹Р№', 'РЎРєР»Р°Рґ РЅР° РЎРЅРµР¶РЅРѕР№ СѓР»РёС†Рµ');
+INSERT INTO warehouses (name, full_name) VALUES ('Р›РёРїРѕРІС‹Р№', 'РЎРєР»Р°Рґ РЅР° Р›РёРїРѕРІРѕР№ СѓР»РёС†Рµ');
+INSERT INTO warehouses (name, full_name) VALUES ('РџСЂРѕРј', 'РЎРєР»Р°Рґ РІ РїСЂРѕРјС‹С€Р»РµРЅРЅРѕР№ Р·РѕРЅРµ');
 
 -- companies_groups --
 
@@ -88,10 +89,10 @@ INSERT INTO journal_titles (name, title, fromView, orderBy, rightType) VALUES ('
 INSERT INTO journal_columns (title_id, nono, caption, source, width, sumup) VALUES (2, 1, 'no', 'no', 30, 'false');
 INSERT INTO journal_columns (title_id, nono, caption, source, width, sumup) VALUES (2, 2, 'name', 'name', 256, 'false');
 
-INSERT INTO companies_groups (name) VALUES ('Группа компаний один');
-INSERT INTO companies_groups (name) VALUES ('Группа компаний два');
-INSERT INTO companies_groups (name) VALUES ('Группа компаний три');
-INSERT INTO companies_groups (name) VALUES ('Группа компаний четыре');
+INSERT INTO companies_groups (name) VALUES ('Р“СЂСѓРїРїР° РєРѕРјРїР°РЅРёР№ РѕРґРёРЅ');
+INSERT INTO companies_groups (name) VALUES ('Р“СЂСѓРїРїР° РєРѕРјРїР°РЅРёР№ РґРІР°');
+INSERT INTO companies_groups (name) VALUES ('Р“СЂСѓРїРїР° РєРѕРјРїР°РЅРёР№ С‚СЂРё');
+INSERT INTO companies_groups (name) VALUES ('Р“СЂСѓРїРїР° РєРѕРјРїР°РЅРёР№ С‡РµС‚С‹СЂРµ');
 
 -- companies --
 
@@ -140,23 +141,7 @@ INSERT INTO journal_columns (title_id, nono, caption, source, width, sumup) VALU
 INSERT INTO journal_columns (title_id, nono, caption, source, width, sumup) VALUES (3, 3, 'full_name', 'full_name', 194, 'false');
 INSERT INTO journal_columns (title_id, nono, caption, source, width, sumup) VALUES (3, 4, 'group', 'group', 128, 'false');
 INSERT INTO journal_columns (title_id, nono, caption, source, width, sumup) VALUES (3, 5, 'address', 'address', 194, 'false');
---INSERT INTO journal_columns (title_id, nono, caption, source, width, sumup) VALUES (3, 0, 'telephone', 'telephone', 128, 'false');
---INSERT INTO journal_columns (title_id, nono, caption, source, width, sumup) VALUES (3, 0, 'email', 'email', 194, 'false');
---INSERT INTO journal_columns (title_id, nono, caption, source, width, sumup) VALUES (3, 0, 'site', 'site', 194, 'false');
---INSERT INTO journal_columns (title_id, nono, caption, source, width, sumup) VALUES (3, 0, 'reg_no', 'reg_no', 194, 'false');
---INSERT INTO journal_columns (title_id, nono, caption, source, width, sumup) VALUES (3, 0, 'town', 'town', 194, 'false');
 INSERT INTO journal_columns (title_id, nono, caption, source, width, sumup) VALUES (3, 6, 'inn', 'inn', 64, 'false');
---INSERT INTO journal_columns (title_id, nono, caption, source, width, sumup) VALUES (3, 0, 'kpp', 'kpp', 194, 'false');
---INSERT INTO journal_columns (title_id, nono, caption, source, width, sumup) VALUES (3, 0, 'okato', 'okato', 194, 'false');
---INSERT INTO journal_columns (title_id, nono, caption, source, width, sumup) VALUES (3, 0, 'okpo', 'okpo', 194, 'false');
---INSERT INTO journal_columns (title_id, nono, caption, source, width, sumup) VALUES (3, 0, 'account', 'account', 194, 'false');
---INSERT INTO journal_columns (title_id, nono, caption, source, width, sumup) VALUES (3, 0, 'bank', 'bank', 194, 'false');
---INSERT INTO journal_columns (title_id, nono, caption, source, width, sumup) VALUES (3, 0, 'bic', 'bic', 194, 'false');
---INSERT INTO journal_columns (title_id, nono, caption, source, width, sumup) VALUES (3, 0, 'corr_acc', 'corr_acc', 194, 'false');
---INSERT INTO journal_columns (title_id, nono, caption, source, width, sumup) VALUES (3, 0, 'head', 'head', 194, 'false');
---INSERT INTO journal_columns (title_id, nono, caption, source, width, sumup) VALUES (3, 0, 'chief_accountant', 'chief_accountant', 194, 'false');
---INSERT INTO journal_columns (title_id, nono, caption, source, width, sumup) VALUES (3, 0, 'accountant', 'accountant', 194, 'false');
---INSERT INTO journal_columns (title_id, nono, caption, source, width, sumup) VALUES (3, 0, 'issued_by', 'issued_by', 194, 'false');
 INSERT INTO journal_columns (title_id, nono, caption, source, width, sumup) VALUES (3, 7, 'rem1', 'rem1', 128, 'false');
 INSERT INTO journal_columns (title_id, nono, caption, source, width, sumup) VALUES (3, 8, 'rem2', 'rem2', 128, 'false');
 INSERT INTO journal_columns (title_id, nono, caption, source, width, sumup) VALUES (3, 9, 'customer', 'customer', 48, 'false');
@@ -221,10 +206,10 @@ INSERT INTO journal_titles (name, title, fromView, orderBy, rightType) VALUES ('
 INSERT INTO journal_columns (title_id, nono, caption, source, width, sumup) VALUES (4, 1, 'no', 'no', 30, 'false');
 INSERT INTO journal_columns (title_id, nono, caption, source, width, sumup) VALUES (4, 2, 'name', 'name', 256, 'false');
 
-INSERT INTO products_groups (name) VALUES ('Группа товаров один');
-INSERT INTO products_groups (name) VALUES ('Группа товаров два');
-INSERT INTO products_groups (name) VALUES ('Группа товаров три');
-INSERT INTO products_groups (name) VALUES ('Группа товаров четыре');
+INSERT INTO products_groups (name) VALUES ('Р“СЂСѓРїРїР° С‚РѕРІР°СЂРѕРІ РѕРґРёРЅ');
+INSERT INTO products_groups (name) VALUES ('Р“СЂСѓРїРїР° С‚РѕРІР°СЂРѕРІ РґРІР°');
+INSERT INTO products_groups (name) VALUES ('Р“СЂСѓРїРїР° С‚РѕРІР°СЂРѕРІ С‚СЂРё');
+INSERT INTO products_groups (name) VALUES ('Р“СЂСѓРїРїР° С‚РѕРІР°СЂРѕРІ С‡РµС‚С‹СЂРµ');
 
 -- products --
 
@@ -256,25 +241,25 @@ INSERT INTO journal_columns (title_id, nono, caption, source, width, sumup) VALU
 INSERT INTO products (
    group_id, article, name, unit, vat
 ) VALUES (
-   1, 'article 1', 'Товар 1', 'unit 1', 20
+   1, 'article 1', 'РўРѕРІР°СЂ 1', 'unit 1', 20
 );
 
 INSERT INTO products (
    group_id, article, name, unit, vat
 ) VALUES (
-   1, 'article 2', 'Товар 2', 'unit 2', 20
+   1, 'article 2', 'РўРѕРІР°СЂ 2', 'unit 2', 20
 );
 
 INSERT INTO products (
    group_id, article, name, unit, vat
 ) VALUES (
-   2, 'article 3', 'Товар 3', 'unit 3', 20
+   2, 'article 3', 'РўРѕРІР°СЂ 3', 'unit 3', 20
 );
 
 INSERT INTO products (
    group_id, article, name, unit, vat
 ) VALUES (
-   3, 'article 4', 'Товар 4', 'unit 4', 20
+   3, 'article 4', 'РўРѕРІР°СЂ 4', 'unit 4', 20
 );
 
 -- autonumberer --
@@ -313,8 +298,11 @@ INSERT INTO autonumberer (
 INSERT INTO autonumberer (
    document, counter, first_value, last_value, prefix, suffix
 ) VALUES (
-   'Issue', 1, 1, 999, 'I', null
+   'Issue', 1, 1, 99999, 'I', null
 );
+
+-- РџРѕР»СѓС‡РµРЅРёРµ РЅРѕРјРµСЂР°
+--SELECT COALESCE(prefix, '')||LPAD(''||counter, LENGTH(''||last_value), '0')||COALESCE(suffix, '') FROM autonumberer;
 
 -- receipts --
 
@@ -322,21 +310,83 @@ CREATE TABLE finlet.receipts (
   id SERIAL PRIMARY KEY,
   doc_numb CHAR(16) NOT NULL,
   doc_date DATE,
+  supplier_id INT REFERENCES companies (id),
   amount DEC(16, 2) NOT NULL,
   rem CHAR(80)
 );
 
-CREATE VIEW v_receipts AS SELECT id, 0 AS no, doc_numb, doc_date, amount, rem FROM receipts;
+CREATE INDEX receipts_idx_1 ON receipts (supplier_id);
 
---INSERT INTO journal_titles (name, title, fromView, orderBy, rightType) VALUES ('receipts', 'receipts', 'v_receipts', 2, 2);
+CREATE VIEW v_receipts AS SELECT r.id, 0 AS no, 
+  r.doc_numb, r.doc_date, s.name AS sup_name, r.amount, r.rem
+  FROM receipts r
+  LEFT OUTER JOIN companies s ON s.id = r.supplier_id;
 
---INSERT INTO journal_columns (title_id, nono, caption, source, width, sumup) VALUES (7,1,'no','no',80,'false');
---INSERT INTO journal_columns (title_id, nono, caption, source, width, sumup) VALUES (7,2,'number','doc_numb',250,'false');
---INSERT INTO journal_columns (title_id, nono, caption, source, width, sumup) VALUES (7,3,'date','doc_date',250,'false');
---INSERT INTO journal_columns (title_id, nono, caption, source, width, sumup) VALUES (7,4,'amount','amount',300,'true');
---INSERT INTO journal_columns (title_id, nono, caption, source, width, sumup) VALUES (7,4,'note','rem',1000,'true');
+INSERT INTO journal_titles (name, title, fromView, orderBy, rightType) VALUES ('receipts', 'receipts', 'v_receipts', 2, 2);
 
-INSERT INTO receipts (doc_numb, doc_date, amount, rem) VALUES ('001/A', '2025-06-23', 123.45, 'Некоторое примечание');
-INSERT INTO receipts (doc_numb, doc_date, amount, rem) VALUES ('004/A', '2025-06-12', 432.01, 'Заметка');
-INSERT INTO receipts (doc_numb, doc_date, amount, rem) VALUES ('002/A', '2025-06-30', 746.43, 'Комментарий');
-INSERT INTO receipts (doc_numb, doc_date, amount, rem) VALUES ('003/A', '2025-06-05', 324.39, 'бла бла бла бла');
+INSERT INTO journal_columns (title_id, nono, caption, source, width, sumup) VALUES (7, 1, 'no', 'no', 30, 'false');
+INSERT INTO journal_columns (title_id, nono, caption, source, width, sumup) VALUES (7, 2, 'number', 'doc_numb', 90, 'false');
+INSERT INTO journal_columns (title_id, nono, caption, source, width, sumup) VALUES (7, 3, 'date', 'doc_date', 90, 'false');
+INSERT INTO journal_columns (title_id, nono, caption, source, width, sumup) VALUES (7, 4, 'sup_name', 'sup_name', 150, 'false');
+INSERT INTO journal_columns (title_id, nono, caption, source, width, sumup) VALUES (7, 5, 'amount', 'amount', 80, 'true');
+INSERT INTO journal_columns (title_id, nono, caption, source, width, sumup) VALUES (7, 6, 'note', 'rem', 200, 'true');
+
+INSERT INTO receipts (doc_numb, doc_date, supplier_id, amount, rem) VALUES ('001/A', '2025-06-23', 1, 123.45, 'РќРµРєРѕС‚РѕСЂРѕРµ РїСЂРёРјРµС‡Р°РЅРёРµ');
+INSERT INTO receipts (doc_numb, doc_date, supplier_id, amount, rem) VALUES ('004/A', '2025-06-12', 2, 432.01, 'Р—Р°РјРµС‚РєР°');
+INSERT INTO receipts (doc_numb, doc_date, supplier_id, amount, rem) VALUES ('002/A', '2025-06-30', 3, 746.43, 'РљРѕРјРјРµРЅС‚Р°СЂРёР№');
+INSERT INTO receipts (doc_numb, doc_date, supplier_id, amount, rem) VALUES ('003/A', '2025-06-05', 4, 324.39, 'Р±Р»Р° Р±Р»Р° Р±Р»Р° Р±Р»Р°');
+
+-- lists --
+
+CREATE TABLE finlet.lists (
+  id SERIAL PRIMARY KEY,
+  doc_type CHAR(1) NOT NULL,
+  doc_id INT NOT NULL,
+  product_id INT NOT NULL,
+  quantity DEC(15, 3),
+  price DEC(15, 2),
+  amount DEC(15, 2),
+  vat DEC(15, 2),
+  amount_vat DEC(15, 2),
+  total DEC(15, 2),
+  rest DEC(15, 3),
+  price_x DEC(15, 4)
+);
+
+CREATE VIEW v_list AS SELECT l.id, 0 AS no, l.doc_type, l.doc_id, 
+  p.group_id, pg.name AS group_name, 
+  l.product_id,  p.article, p.name, p.unit,
+  l.quantity, l.price, l.amount, l.vat, l.amount_vat, l.total, l.rest, l.price_x
+FROM lists l
+INNER JOIN products p ON p.id = l.product_id
+INNER JOIN products_groups pg ON pg.id = p.group_id;
+
+INSERT INTO journal_titles (name, title, fromView, orderBy, rightType) VALUES ('list', 'list', 'v_list', 1, 2);
+
+INSERT INTO journal_columns (title_id, nono, caption, source, display_class, width, sumup) VALUES (8, 1, 'no', 'no', 'java.lang.Integer', 16, 'false');
+INSERT INTO journal_columns (title_id, nono, caption, source, display_class, width, sumup) VALUES (8, 2, 'id', 'id', 'java.lang.Integer', 16, 'false');
+INSERT INTO journal_columns (title_id, nono, caption, source, display_class, width, sumup) VALUES (8, 3, 'article', 'article', 'java.lang.String', 48, 'false');
+INSERT INTO journal_columns (title_id, nono, caption, source, display_class, width, sumup) VALUES (8, 4, 'name', 'name', 'java.lang.String', 128, 'false');
+INSERT INTO journal_columns (title_id, nono, caption, source, display_class, width, sumup) VALUES (8, 5, 'group', 'group_name', 'java.lang.String', 32, 'false');
+INSERT INTO journal_columns (title_id, nono, caption, source, display_class, width, sumup) VALUES (8, 6, 'unit', 'unit', 'java.lang.String', 24, 'false');
+INSERT INTO journal_columns (title_id, nono, caption, source, display_class, width, sumup) VALUES (8, 7, 'quantity', 'quantity', 'java.math.BigDecimal', 24, 'true');
+INSERT INTO journal_columns (title_id, nono, caption, source, display_class, width, sumup) VALUES (8, 8, 'price', 'price', 'java.math.BigDecimal', 24, 'false');
+INSERT INTO journal_columns (title_id, nono, caption, source, display_class, width, sumup) VALUES (8, 9, 'amount', 'amount', 'java.math.BigDecimal', 24, 'true');
+INSERT INTO journal_columns (title_id, nono, caption, source, display_class, width, sumup) VALUES (8, 10, 'vat', 'vat', 'java.math.BigDecimal', 24, 'false');
+INSERT INTO journal_columns (title_id, nono, caption, source, display_class, width, sumup) VALUES (8, 11, 'amount_vat', 'amount_vat', 'java.math.BigDecimal', 24, 'true');
+INSERT INTO journal_columns (title_id, nono, caption, source, display_class, width, sumup) VALUES (8, 12, 'total', 'total', 'java.math.BigDecimal', 24, 'true');
+INSERT INTO journal_columns (title_id, nono, caption, source, display_class, width, sumup) VALUES (8, 13, 'rest', 'rest', 'java.math.BigDecimal', 24, 'false');
+INSERT INTO journal_columns (title_id, nono, caption, source, display_class, width, sumup) VALUES (8, 14, 'price_x', 'price_x', 'java.math.BigDecimal', 24, 'false');
+
+INSERT INTO lists (doc_type, doc_id, product_id, quantity, price, amount, vat, amount_vat, total, rest, price_x) VALUES
+  ('A', 1, 1, 12, 24.56, 123, 20, 12, 12345, 3, 0);
+
+INSERT INTO lists (doc_type, doc_id, product_id, quantity, price, amount, vat, amount_vat, total, rest, price_x) VALUES
+  ('A', 1, 2, 12, 24.56, 123, 20, 12, 12345, 3, 0);
+
+INSERT INTO lists (doc_type, doc_id, product_id, quantity, price, amount, vat, amount_vat, total, rest, price_x) VALUES
+  ('A', 2, 1, 12, 24.56, 123, 20, 12, 12345, 3, 0);
+INSERT INTO lists (doc_type, doc_id, product_id, quantity, price, amount, vat, amount_vat, total, rest, price_x) VALUES
+  ('A', 2, 3, 2, 32.56, 123, 20, 12, 12345, 3, 0);
+INSERT INTO lists (doc_type, doc_id, product_id, quantity, price, amount, vat, amount_vat, total, rest, price_x) VALUES
+  ('A', 2, 4, 9, 590.56, 123, 10, 12, 5432, 3, 0);

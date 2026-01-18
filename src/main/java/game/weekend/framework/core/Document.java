@@ -1,5 +1,7 @@
 package game.weekend.framework.core;
 
+import java.util.ArrayList;
+
 /**
  * Окно документа.
  */
@@ -17,6 +19,13 @@ public class Document extends IntFrame {
 	 */
 	public Document(int id, int mode, FrameManager parentFrameMan) {
 		super(id, mode, parentFrameMan);
+	}
+
+	/**
+	 * Создать окно документа.
+	 */
+	public Document(int id, int mode, FrameManager parentFrameMan, ArrayList<ListData> arrayListData) {
+		super(id, mode, parentFrameMan, arrayListData);
 	}
 
 	/**
@@ -62,7 +71,7 @@ public class Document extends IntFrame {
 	 * 
 	 * @return объект данных.
 	 */
-	public DocData getData() {
+	public DocData getDocData() {
 		return docData;
 	}
 

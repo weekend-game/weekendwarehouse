@@ -12,9 +12,7 @@ import game.weekend.framework.core.Loc;
 public class ReceiptsJournal extends Journal {
 
 	public ReceiptsJournal(int id, int mode, FrameManager parentFrameMan) {
-		super(null, id, mode, parentFrameMan);
-		
-		this.setTitle(Loc.get("receipts"));
+		super("receipts", id, mode, parentFrameMan);
 	}
 
 	/**
@@ -22,21 +20,31 @@ public class ReceiptsJournal extends Journal {
 	 */
 	@Override
 	public void delete() {
+		// ID текущего документа
 		int id = getDocId();
-		if (id > 0) {
-			try {
-				ReceiptsData data = new ReceiptsData(id, IEditable.DELETE, this);
 
-				if (getMainFrame().getMes().conf2("Вы действительно желаете удалить документ номер "
-						+ ((String) data.getValue("doc_numb")).trim() + "?")) {
+		// Нулём он будет если текущая строка это итоговая строка (отрицательных ID в
+		// журналах не бывает)
+		if (id != 0) {
+			try {
+				// Операции с данными делает DocData
+				ReceiptsDocData data = new ReceiptsDocData(id, IEditable.DELETE, this);
+
+				// Уточняю у пользователя его намерения
+				if (getMainFrame().getMes().conf2(Loc.get("are_you_sure_you_want_to_remove_the_document") + " '"
+						+ ((String) data.getValue("doc_numb")).trim() + "'?")) {
+
+					// Прошу DocData удалить документ
 					if (data.delete()) {
+
+						// Сообщаю Table об удалении, что бы она убрала с экрана этот документ
 						getTable().changed(id, IEditable.DELETE);
+
 					}
 				}
 			} catch (Exception e) {
 				getMainFrame().getMes().err(e.toString());
 			}
-		} else {
 		}
 	}
 }

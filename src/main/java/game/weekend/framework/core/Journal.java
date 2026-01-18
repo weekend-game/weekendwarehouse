@@ -1,7 +1,5 @@
 package game.weekend.framework.core;
 
-import java.sql.SQLException;
-
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JSeparator;
@@ -119,10 +117,15 @@ public class Journal extends IntFrame implements IEditable {
 
 	@Override
 	public void edit() {
+		// Имя класса для редактирования журнала
 		String className = getDocClass();
 		if (className != null) {
+			// ID докмента посовместительству служит ID окна
 			int id = getDocId();
-			int mode = (id > 0) ? IEditable.EDIT : IEditable.ADD;
+
+			// Это может быть и ADD
+			int mode = (id != 0) ? IEditable.EDIT : IEditable.ADD;
+
 			createFrame(className, id, mode);
 		}
 	}
@@ -172,9 +175,8 @@ public class Journal extends IntFrame implements IEditable {
 
 	/**
 	 * Сообщение от документа о изменении или добавлении документа
-	 * 
-	 * @throws SQLException
 	 */
+	@Override
 	public void modified(int id, int mode) {
 		try {
 			if (id == 0) {

@@ -1,6 +1,7 @@
 package game.weekend.framework.core;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -271,6 +272,17 @@ public abstract class DocData {
 	public void update() {
 		for (IControl<?> g : controls.values())
 			g.save();
+	}
+
+	public boolean InList(int id, ArrayList<DocData> arrayListData) {
+		boolean result = false;
+		for (DocData dd : arrayListData) {
+			if ((int) dd.getValue("id") == id) {
+				result = true;
+				break;
+			}
+		}
+		return result;
 	}
 
 	public final Mes getMes() {

@@ -4,6 +4,7 @@ import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import javax.swing.ActionMap;
 import javax.swing.InputMap;
@@ -16,6 +17,7 @@ import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableRowSorter;
 
 import game.weekend.framework.core.Acts;
+import game.weekend.framework.core.DocData;
 import game.weekend.framework.core.IDB;
 import game.weekend.framework.core.IEditable;
 
@@ -25,15 +27,15 @@ import game.weekend.framework.core.IEditable;
 public class Table {
 
 	/**
-	 * Создать таблицу.
+	 * Создать таблицу с указанной моделью.
 	 * 
-	 * @param definition Определение таблицы
-	 * @param db         Объект для работы с БД.
-	 * @throws Exception
+	 * @param definition определение таблицы,
+	 * @param acts       действия приложения,
+	 * @param model      модель.
 	 */
-	public Table(TableDefinition definition, Acts acts, IDB db) throws Exception {
+	protected Table(TableDefinition definition, Acts acts, ITableModel model) {
+		this.model = model;
 
-		model = new TableModelArrayList(definition, db);
 		table = new JTable(model);
 		pane = new JScrollPane(table);
 		turnBandingOn();
@@ -53,9 +55,21 @@ public class Table {
 		for (int i = 0; i < definition.columns.size(); ++i) {
 			cm.getColumn(i).setPreferredWidth(definition.columns.get(i).width);
 		}
+	}
 
-		// Позиционируемся в предпоследнюю (кроме итоговой) строку в нулевую
-		// колонку
+	/**
+	 * Создать таблицу с моделью работающей с БД.
+	 * 
+	 * @param definition определение таблицы,
+	 * @param acts       действия приложения,
+	 * @param db         объект для работы с БД.
+	 * 
+	 * @throws Exception
+	 */
+	public Table(TableDefinition definition, Acts acts, IDB db) throws Exception {
+		this(definition, acts, new TableModelDB(definition, db));
+
+		// Позиционируемся в предпоследнюю строку в нулевую колонку
 		int row = model.getRowCount() - 3;
 		if (row < 0) {
 			row = 0;
@@ -64,10 +78,27 @@ public class Table {
 	}
 
 	/**
+	 * Создать таблицу с моделью работающей с ArrayList.
+	 * 
+	 * @param definition   определение таблицы,
+	 * @param acts         действия приложения,
+	 * @param arrayDocData ArrayList<DocData>.
+	 * 
+	 * @throws Exception
+	 */
+
+	public Table(TableDefinition definition, Acts acts, ArrayList<DocData> arrayDocData) throws Exception {
+		this(definition, acts, new TableModelAL(definition, arrayDocData));
+
+		// Позиционируемся в нулевую строку в нулевую колонку
+		setRowCol(0, 0);
+	}
+
+	/**
 	 * Установить текущей и отобразить указанную ячейку.
 	 * 
-	 * @param row строка
-	 * @param col колонка
+	 * @param row строка,
+	 * @param col колонка.
 	 */
 	public void setRowCol(int row, int col) {
 		Rectangle rect = table.getCellRect(row, col, true);
@@ -80,8 +111,6 @@ public class Table {
 
 	/**
 	 * Включить полоски.
-	 * 
-	 * @param table
 	 */
 	private void turnBandingOn() {
 		for (int i = 0; i < model.getColumnCount(); ++i) {
@@ -103,8 +132,6 @@ public class Table {
 
 	/**
 	 * Получить ID текущей строки.
-	 * 
-	 * Используется окном в котором расположена таблица для её редактирования.
 	 * 
 	 * @return ID текущей строки.
 	 */
@@ -129,12 +156,12 @@ public class Table {
 		return sorter;
 	}
 
-	public TableModelArrayList getModel() {
+	public ITableModel getModel() {
 		return model;
 	}
 
 	/**
-	 * Обновить содиржимое.
+	 * Обновить содержимое.
 	 */
 	public void refresh() {
 		TableSaver gs = new TableSaver(this);
@@ -158,17 +185,15 @@ public class Table {
 	}
 
 	/**
-	 * Включить перехват двойного клика на строке для редактирования документа.
+	 * Включить перехват двойного клика на строке.
 	 * 
 	 * @param acts действия приложения.
 	 */
 	private void turnDoubleClickOn(final Acts acts) {
 		table.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(final MouseEvent e) {
-				if (e.getClickCount() > 1 && e.getButton() == MouseEvent.BUTTON1) {
-
+				if (e.getClickCount() > 1 && e.getButton() == MouseEvent.BUTTON1)
 					acts.getAct("Edit").actionPerformed(null);
-				}
 			}
 		});
 	}
@@ -207,7 +232,7 @@ public class Table {
 		}
 	}
 
-	private TableModelArrayList model;
+	private ITableModel model;
 	private TableRowSorter<ITableModel> sorter;
 	private JTable table;
 	private JScrollPane pane;

@@ -37,9 +37,9 @@ public class WeekendWarehouse {
 	public static final String IMAGE_PATH = "/game/weekend/warehouse/images/";
 
 	public static final String APP_NAME = "WeekendWarehouse";
-	public static final String APP_VERSION = "00.10";
-	public static final String APP_DATE = "21.12.2025";
-	public static final String APP_COPYRIGHT = "(c) Weekend Game, 2025";
+	public static final String APP_VERSION = "00.11";
+	public static final String APP_DATE = "18.01.2026";
+	public static final String APP_COPYRIGHT = "(c) Weekend Game, 2025-2026";
 	public static final String APP_OTHER = "Weekend Warehouse";
 
 	public final String appIcon = null;

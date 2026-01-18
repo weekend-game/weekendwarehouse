@@ -37,4 +37,12 @@ public interface IDB {
 	 */
 	public TableDefinition getTableDefinition(String name);
 
+	/**
+	 * Получить автономер документа.
+	 * 
+	 * @param document наименование документа.
+	 * @return автономер документа.
+	 */
+	String getNumber(String document);
+
 }

@@ -90,7 +90,7 @@ public class DB implements IDB {
 				journalTitles = getConnection()
 						.prepareStatement("SELECT id, title, fromView, orderBy FROM journal_titles WHERE name = ?");
 			if (journalColumns == null)
-				journalColumns = getConnection().prepareStatement("SELECT caption, source, width, sumup "
+				journalColumns = getConnection().prepareStatement("SELECT caption, source, display_class, width, sumup "
 						+ " FROM journal_columns WHERE title_id = ? ORDER BY nono ");
 
 			journalTitles.setString(1, name);
@@ -103,7 +103,7 @@ public class DB implements IDB {
 				journalColumns.setInt(1, td.id);
 				rs = journalColumns.executeQuery();
 				while (rs.next())
-					td.addColumnDefinition(rs.getString(1), rs.getString(2), rs.getInt(3), rs.getBoolean(4));
+					td.addColumnDefinition(rs.getString(1), rs.getString(2), rs.getString(3), rs.getInt(4), rs.getBoolean(5));
 				rs.close();
 			}
 		} catch (SQLException e) {
@@ -113,10 +113,79 @@ public class DB implements IDB {
 		return td;
 	}
 
+	@Override
+	public String getNumber(String document) {
+		String result = "none";
+		ResultSet rs;
+
+		try {
+			getConnection().setAutoCommit(false);
+
+			if (numberUpdate == null)
+				numberUpdate = getConnection()
+						.prepareStatement("UPDATE autonumberer SET counter = counter + 1 WHERE document = ?");
+
+			if (numberSelect == null)
+				numberSelect = getConnection().prepareStatement(
+						"SELECT COALESCE(prefix, '')||LPAD(''||(counter-1), LENGTH(''||last_value), '0')||COALESCE(suffix, ''), "
+								+ "counter, first_value, last_value FROM autonumberer WHERE document = ?");
+
+			if (numberReset == null)
+				numberReset = getConnection()
+						.prepareStatement("UPDATE autonumberer SET counter = ? WHERE document = ?");
+
+			numberUpdate.setString(1, document);
+			numberUpdate.execute();
+
+			int counter = 0;
+			int firstValue = 0;
+			int lastValue = 0;
+
+			numberSelect.setString(1, document);
+			rs = numberSelect.executeQuery();
+			if (rs.next()) {
+				result = rs.getString(1);
+				counter = rs.getInt(2);
+				firstValue = rs.getInt(3);
+				lastValue = rs.getInt(4);
+			}
+			rs.close();
+
+			if (firstValue < lastValue && counter > lastValue) {
+				numberReset.setInt(1, firstValue);
+				numberReset.setString(2, document);
+				numberReset.execute();
+			}
+
+			getConnection().commit();
+
+		} catch (SQLException e) {
+			System.out.println("DB.getNumber() " + e);
+			try {
+				getConnection().rollback();
+			} catch (SQLException e1) {
+				System.out.println("DB.getNumber()\n" + "getConnection().rollback()\n" + e1);
+			}
+		} finally {
+			try {
+				getConnection().setAutoCommit(true);
+			} catch (SQLException e) {
+				System.out.println("DB.getNumber()\n" + "getConnection().setAutoCommit(true)\n" + e);
+			}
+		}
+
+		return result;
+	}
+
 	private Mes mes;
 	private Proper pro;
 	private Connection connection;
 
 	private static PreparedStatement journalTitles = null;
 	private static PreparedStatement journalColumns = null;
+
+	private static PreparedStatement numberUpdate = null;
+	private static PreparedStatement numberSelect = null;
+	private static PreparedStatement numberReset = null;
+
 }
